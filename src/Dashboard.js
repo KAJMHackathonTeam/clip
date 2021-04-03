@@ -2,7 +2,8 @@ import React from 'react';
 import Topper from './Topper';
 import { Input, IconButton, Center, Button, Flex } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
-
+import Amplify,{ Auth} from 'aws-amplify'
+import { withAuthenticator } from '@aws-amplify/ui-react'
 
 class Dashboard extends React.Component {
     constructor(props){
@@ -54,4 +55,4 @@ class Dashboard extends React.Component {
     }
 };
 
-export default Dashboard;
+export default withAuthenticator(Dashboard);

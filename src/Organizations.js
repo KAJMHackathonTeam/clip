@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Topper from './Topper.js'
 import { Accordion, Nav, Navbar, NavDropdown, Image, Jumbotron, ListGroup, Container, Col, Row, Carousel, Card, Button, Form, CardColumns } from 'react-bootstrap';
 import { Text } from '@chakra-ui/react';
+import Amplify, {Auth} from 'aws-amplify'
+import { withAuthenticator } from '@aws-amplify/ui-react'
 import { DataStore } from '@aws-amplify/datastore';
 import { Organization } from './models';
 
@@ -10,9 +12,11 @@ class Organizations extends React.Component {
     constructor(props){
         super(props)
         this.state = {
+            username: '',
             name: '',
             user: '',
             users: [],
+            id: "",
             exists: false
         }
         this.onNameChange = this.onNameChange.bind(this)
@@ -21,11 +25,29 @@ class Organizations extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
     async componentDidMount(){
-        const users = await DataStore.query(Organization);
-
-        console.log(users)
-        if(users !== []){
-            this.setState({users: users})
+        let username = ""
+        try {
+            const currentUserInfo = await Auth.currentUserInfo();
+            username = currentUserInfo.username
+            this.setState({username: username});
+          } catch (err) {
+            console.log('error fetching user info: ', err);
+          }
+        
+        const organizations = await DataStore.query(Organization);
+        console.log(organizations)
+        let organization;
+        let exists = false;
+        for(var i = 0; i < organizations.length; i ++){
+            if (organizations[i].creator === username){
+                organization = organizations[i]
+                exists = true
+            }
+        }
+        if(exists === true){
+            this.setState({users: organization.users})
+            this.setState({name: organization.name})
+            this.setState({id: organization.id})
             this.setState({exists: true})
         }
 
@@ -34,6 +56,7 @@ class Organizations extends React.Component {
         this.setState({name: e.target.value})
     }
     onUserChange(e){
+        console.log(this.state.users)
         this.setState({user: e.target.value})
     }
     onUserSubmit(){
@@ -49,26 +72,26 @@ class Organizations extends React.Component {
     async handleSubmit(){
         try{
         if (this.state.exists === true){
-            
-
-            //await DataStore.save(Organization.copyOf(CURRENT_ITEM, item => {
-              //  item.name = this.state.name
-                //item.users = this.state.users
-            //}))
-            //.then(() => {
-              //  alert("Organization Updated")
-              //  window.location.reload();
-              //})
+            const organization = await DataStore.query(Organization, this.state.id);
+            await DataStore.save(Organization.copyOf(organization, item => {
+                item.name = this.state.name
+                item.users = this.state.users
+            }))
+            .then(() => {
+                alert("Organization Updated")
+                //window.location.reload();
+              })
         }else{
             await DataStore.save(
                 new Organization({
                     "name": this.state.name,
-                    "users": this.state.users
+                    "users": this.state.users,
+                    "creator":this.state.username
                 })
             )
             .then(() => {
                 alert("Organization Created")
-                window.location.reload();
+                //window.location.reload();
               })
         }
         }catch{
@@ -104,4 +127,4 @@ class Organizations extends React.Component {
     }
 };
 
-export default Organizations;
+export default withAuthenticator(Organizations);

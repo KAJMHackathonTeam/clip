@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Amplify, {Auth} from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
+import awsconfig from './aws-exports';
 import {DataStore} from '@aws-amplify/datastore';
-import awsconfig from './aws-exports.js';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from "@chakra-ui/react";
+
+Amplify.configure(awsconfig);
 
 ReactDOM.render(
   <React.StrictMode>
