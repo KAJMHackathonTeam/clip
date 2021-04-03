@@ -11,7 +11,7 @@ BrowserRouter as Router,
   useHistory
 } from "react-router-dom";
 import logo from './assets/default.svg';
-import {LANDING, DASHBOARD} from './App.js'
+import {LANDING, DASHBOARD, ORGANIZATIONS} from './App.js'
 const NavLink = styled(Link)`
   color: #fff;
   display: flex;
@@ -60,16 +60,22 @@ const NavBtnLink = styled(Link)`
   export function Topper(){
     return(
         <Navbar style = {{backgroundColor: "#000000", boxShadow:'0vh 0.2vh'}}  expand="lg">
-          <Navbar.Brand style = {{margin:'5px'}}><Image src={logo} alt="Clip! logo" height="auto" width="70rem"></Image> </Navbar.Brand>
+          <Navbar.Brand style = {{marginLeft:'10px'}}><Image src={logo} alt="Clip! logo" height="auto" width="100rem"></Image> </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" style = {{backgroundColor: "white"}}/>
           <Navbar.Collapse id="basic-navbar-nav" >
             <Nav className="mr-auto" >
               <NavLink to={LANDING} style = {{color: "white", margin: '5px'}}>
                 Home
               </NavLink>
+              <NavLink to={DASHBOARD} style = {{color: "white", margin: '5px'}}>
+                Dashboard
+              </NavLink>
+              <NavLink to={ORGANIZATIONS} style = {{color: "white", margin: '5px'}}>
+                Organizations
+              </NavLink>
             </Nav>
             <NavBtn>
-              <NavBtnLink to={DASHBOARD}>Login</NavBtnLink>
+              <NavBtnLink to={DASHBOARD}>Sign Out</NavBtnLink>
             </NavBtn>
           </Navbar.Collapse>
         </Navbar>

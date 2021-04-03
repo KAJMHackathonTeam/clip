@@ -8,7 +8,6 @@ import Topper from './Topper.js';
 function Landing() {
     return (
         <>
-          <Topper/>
           <div id="main">
         {
           /* 
@@ -29,7 +28,7 @@ function Landing() {
           <Box>
             <Text fontSize="5xl">Bringing <strong>community</strong> back into <strong>online learning.</strong></Text>
             <Center>
-              <Link to = {DASHBOARD} isExternal><Button bgColor="#2ec4b6" marginTop="2rem">Get Started</Button></Link>
+              <a href = {DASHBOARD}><Button bgColor="#2ec4b6" marginTop="2rem">Get Started</Button></a>
             </Center>
           </Box>
         </Flex>
