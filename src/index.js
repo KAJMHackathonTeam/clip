@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-//import Amplify, {Auth} from 'aws-amplify';
-//import {DataStore} from '@aws-amplify/datastore';
-//import { User } from './models';
+import Amplify, {Auth} from 'aws-amplify';
+import {DataStore} from '@aws-amplify/datastore';
 import awsconfig from './aws-exports.js';
 import App from './App';
 import reportWebVitals from './reportWebVitals';

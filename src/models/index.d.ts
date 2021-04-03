@@ -6,8 +6,10 @@ import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplif
 
 export declare class Response {
   readonly id: string;
-  readonly response?: string;
-  readonly messageID?: string;
+  readonly response: string;
+  readonly messageID: string;
+  readonly user: string;
+  readonly time: string;
   constructor(init: ModelInit<Response>);
   static copyOf(source: Response, mutator: (draft: MutableModel<Response>) => MutableModel<Response> | void): Response;
 }
@@ -18,6 +20,7 @@ export declare class Message {
   readonly subject: string;
   readonly organization: string;
   readonly user: string;
+  readonly time: string;
   constructor(init: ModelInit<Message>);
   static copyOf(source: Message, mutator: (draft: MutableModel<Message>) => MutableModel<Message> | void): Message;
 }

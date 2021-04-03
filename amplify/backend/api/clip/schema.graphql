@@ -1,7 +1,9 @@
 type Response @model @auth(rules: [{allow: public}]) {
   id: ID!
-  response: String
-  messageID: String
+  response: String!
+  messageID: String!
+  user: String!
+  time: String!
 }
 
 type Message @model @auth(rules: [{allow: public}]) {
@@ -10,6 +12,7 @@ type Message @model @auth(rules: [{allow: public}]) {
   subject: String!
   organization: String!
   user: String!
+  time: String!
 }
 
 type Organization @model @auth(rules: [{allow: public}]) {
@@ -25,3 +28,4 @@ type User @model @auth(rules: [{allow: public}]) {
   phone: String!
   organizations: [String!]
 }
+ 

@@ -1,6 +1,10 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
 import Topper from './Topper.js'
 import { Accordion, Nav, Navbar, NavDropdown, Image, Jumbotron, ListGroup, Container, Col, Row, Carousel, Card, Button, Form, CardColumns } from 'react-bootstrap';
+import { Text } from '@chakra-ui/react';
+import { DataStore } from '@aws-amplify/datastore';
+import { Organization } from './models';
 
 class Organizations extends React.Component {
     constructor(props){
@@ -8,12 +12,22 @@ class Organizations extends React.Component {
         this.state = {
             name: '',
             user: '',
-            users: []
+            users: [],
+            exists: false
         }
         this.onNameChange = this.onNameChange.bind(this)
         this.onUserChange = this.onUserChange.bind(this)
         this.onUserSubmit = this.onUserSubmit.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+    }
+    async componentDidMount(){
+        const users = await DataStore.query(Organization);
+        console.log(users)
+        if(users !== []){
+            this.setState({users: users})
+            this.setState({exists: true})
+        }
+
     }
     onNameChange(e){
         this.setState({name: e.target.value})
@@ -30,10 +44,31 @@ class Organizations extends React.Component {
             this.setState({users: users})
             this.setState({user: ""})
         }
-
-        console.log(users)
     }
-    handleSubmit(){
+    async handleSubmit(){
+        if (exists === true){
+            /* Models in DataStore are immutable. To update a record you must use the copyOf function
+            to apply updates to the item’s fields rather than mutating the instance directly */
+            await DataStore.save(Organization.copyOf(CURRENT_ITEM, item => {
+                item.name = this.state.name
+                item.users = this.state.users
+            }))
+            .then(() => {
+                alert("Organization Updated")
+                window.location.reload();
+              })
+        }else{
+            await DataStore.save(
+                new Organization({
+                    "name": this.state.name,
+                    "users": this.state.users
+                })
+            )
+            .then(() => {
+                alert("Organization Created")
+                window.location.reload();
+              })
+        }
 
     }
     render(){
@@ -41,6 +76,7 @@ class Organizations extends React.Component {
             <>
                 <Topper/>
                 <Jumbotron style = {{margin: '10px'}}>
+                    <Text fontSize="5xl">Manage Organizations</Text><br/>
                    <Form id = 'CreateOrganizations'>
                         <Form.Group controlId="formName">
                             <Form.Label>Organization Name</Form.Label><br/>
