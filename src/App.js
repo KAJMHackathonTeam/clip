@@ -1,39 +1,30 @@
 import './App.css';
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch
+} from "react-router-dom";
+import Landing from './Landing.js'
+import Dashboard from './Dashboard.js'
+import Organizations from './Organizations.js'
 // eslint-disable-next-line
-import { Heading, Image, Flex, Center, Box, IconButton, Text, Button, Container } from '@chakra-ui/react';
-// import { HamburgerIcon } from '@chakra-ui/icons';
-// import logo from "./default.png";
-import banner from "./profile.png"
 
-function App() {
-  return (
-    <div id="main">
-      {
-        /* 
-        <header>
-          <Box bgColor="#fffffc">
-            <Center>
-              <Image src={banner} alt="Clip! logo" boxSize="100px" objectFit="cover"></Image>
-            </Center>
-        </Box>
-      </header>
-      */
-      }
-
-      <Flex justify="center" minHeight="100vh" alignItems="center">
-        <Box>
-          <Image src={banner} alt="Clip! logo" height="auto" width="40rem"></Image> 
-        </Box>
-        <Box>
-          <Text fontSize="5xl">Bringing <strong>community</strong> back into <strong>online learning.</strong></Text>
-          <Center>
-            <Button bgColor="#2ec4b6" marginTop="2rem">Get Started</Button>
-          </Center>
-        </Box>
-      </Flex>
-
-    </div>
-  );
-}
+export var LANDING = '/'
+export var DASHBOARD = '/dashboard'
+export var ORGANIZATIONS = '/organizations'
+class App extends React.Component {
+  render(){
+    return (
+      <Router>
+        <Switch>
+          <Route exact path= {LANDING} component={Landing}/>
+          <Route path= {DASHBOARD} component={Dashboard}/>
+          <Route path= {ORGANIZATIONS} component={Organizations}/>
+        </Switch>
+      </Router>
+    );
+  }
+};
 
 export default App;
