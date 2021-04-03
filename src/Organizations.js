@@ -46,7 +46,8 @@ class Organizations extends React.Component {
         }
     }
     async handleSubmit(){
-        if (exists === true){
+        try{
+        if (this.state.exists === true){
             /* Models in DataStore are immutable. To update a record you must use the copyOf function
             to apply updates to the item’s fields rather than mutating the instance directly */
             await DataStore.save(Organization.copyOf(CURRENT_ITEM, item => {
@@ -69,7 +70,9 @@ class Organizations extends React.Component {
                 window.location.reload();
               })
         }
-
+        }catch{
+            alert("Error in creation")
+        }
     }
     render(){
         return(
