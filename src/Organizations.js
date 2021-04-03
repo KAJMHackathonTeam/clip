@@ -21,7 +21,8 @@ class Organizations extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
     async componentDidMount(){
-        const users = await DataStore.query(Organization);
+        const organizations = await DataStore.query(Organization);
+
         console.log(users)
         if(users !== []){
             this.setState({users: users})
@@ -48,16 +49,16 @@ class Organizations extends React.Component {
     async handleSubmit(){
         try{
         if (this.state.exists === true){
-            /* Models in DataStore are immutable. To update a record you must use the copyOf function
-            to apply updates to the item’s fields rather than mutating the instance directly */
-            await DataStore.save(Organization.copyOf(CURRENT_ITEM, item => {
-                item.name = this.state.name
-                item.users = this.state.users
-            }))
-            .then(() => {
-                alert("Organization Updated")
-                window.location.reload();
-              })
+            
+
+            //await DataStore.save(Organization.copyOf(CURRENT_ITEM, item => {
+              //  item.name = this.state.name
+                //item.users = this.state.users
+            //}))
+            //.then(() => {
+              //  alert("Organization Updated")
+              //  window.location.reload();
+              //})
         }else{
             await DataStore.save(
                 new Organization({
