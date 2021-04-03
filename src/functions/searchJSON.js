@@ -70,10 +70,12 @@ function main()
             "Text" : "is 1 + 1 = 2?"
         },
     ]
-    console.log(searchJSONArray(arr=JSONarr ,searchKey='Text', searchValue="IS 1"));
+    console.log(searchJSONArray(JSONarr ,'Text', "IS 1"));
 }
 
 if (IS_DEBUG)
 {
     main();
 }
+
+module.exports = {searchJSONArray};
