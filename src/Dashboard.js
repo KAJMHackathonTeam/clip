@@ -72,6 +72,8 @@ class Dashboard extends React.Component {
                     <Input placeholder="Enter Message" onChange={this.handleMessageChange}/>
                     <Button bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleMessageSubmit}>Submit</Button>
                 </Center>
+
+                <MessageBoard/>
             </div>
         );
     }
