@@ -21,7 +21,7 @@ class Organizations extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
     async componentDidMount(){
-        const organizations = await DataStore.query(Organization);
+        const users = await DataStore.query(Organization);
 
         console.log(users)
         if(users !== []){
