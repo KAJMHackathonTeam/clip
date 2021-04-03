@@ -1,9 +1,17 @@
 import React from 'react';
 import Topper from './Topper';
+import { searchJSONArray } from './functions/searchJSON'
 import { Input, IconButton, Center, Button, Flex } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
+<<<<<<< HEAD
 import Amplify,{ Auth} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
+=======
+import { DataStore } from '@aws-amplify/datastore';
+import { Response, Message, Organization, User } from './models';
+
+import MessageBoard from './MessageBoard';
+>>>>>>> f115dc55fc8045e36a5ae3eddf5c40c3651f84d7
 
 class Dashboard extends React.Component {
     constructor(props){
@@ -12,9 +20,11 @@ class Dashboard extends React.Component {
             message: '',
             searchQuery: ''
         }
+        
         this.handleSearchChange = this.handleSearchChange.bind(this)
         this.handleMessageChange = this.handleMessageChange.bind(this)
-        this.handleMessageChange = this.handleMessageChange.bind(this)
+
+        this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
         this.handleMessageSubmit = this.handleMessageSubmit.bind(this)
     }
 
@@ -23,14 +33,32 @@ class Dashboard extends React.Component {
     }
 
     handleMessageChange(event) {
-       this.setState({message: event.Button});
+       this.setState({message: event.target.value});
     }
 
-    handleSearchSubmit(event) {
+    async handleSearchSubmit(event) {
+        //fetch Messages
+        const models = await DataStore.query(Message);
+
+        var result = searchJSONArray(models, 'message', this.state.searchQuery)
+        console.log('message: ', this.state.searchQuery);
+        console.log('all: ', models);
+        console.log('search: ', result);
+    }
+
+    async handleMessageSubmit(event) {
+        console.log("message submit" ,this.state)
         
-    }
-
-    handleMessageSubmit(event) {
+        await DataStore.save(
+            new Message({
+                "message": this.state.message,
+                "subject": "TODO: Not yet implemented",
+                "organization": "TODO: Not yet implemented",
+                "user": "TODO: Not yet implemented",
+                "time": (new Date()).toString()
+            })
+        );
+        
         
     }
 
@@ -50,6 +78,8 @@ class Dashboard extends React.Component {
                     <Input placeholder="Enter Message" onChange={this.handleMessageChange}/>
                     <Button bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleMessageSubmit}>Submit</Button>
                 </Center>
+
+                <MessageBoard/>
             </div>
         );
     }

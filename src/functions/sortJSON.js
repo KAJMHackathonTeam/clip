@@ -93,3 +93,5 @@ if (IS_DEBUG)
 {
     main();
 }
+
+module.exports = {sortJSONArray};
