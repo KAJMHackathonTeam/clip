@@ -1,13 +1,22 @@
 import React from 'react';
 import Topper from './Topper';
-import { Input, IconButton, Center } from '@chakra-ui/react';
+import { Input, IconButton, Center, Button, Flex } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
+import { DataStore } from '@aws-amplify/datastore';
 
-const handleChange = (event) => {
+const handleSearchChange = (event) => {
     console.log(event.target.value);
 }
 
-const handleSubmit = (event) => {
+const handleMessageChange = (event) => {
+    console.log(event.target.value);
+}
+
+const handleSearchSubmit = (event) => {
+    console.log(event);
+}
+
+const handleMessageSubmit = (event) => {
     console.log(event);
 }
 
@@ -16,15 +25,18 @@ class Dashboard extends React.Component {
         return(
             <div>
                 <Topper/>
-
+                
                 {/* Search Bar */}
                 <Center m="auto" w="50%" my="2rem">
-                    <Input placeholder="Search" onChange={handleChange} /> 
-                    <IconButton bgColor="#2EC4B6" color="white" onClick={handleSubmit} icon={<SearchIcon/>}/>
-                </Center>
+                    <Input placeholder="Search" onChange={handleSearchChange} /> 
+                    <IconButton bgColor="#2EC4B6" color="#FDFFFC" onClick={handleSearchSubmit} icon={<SearchIcon/>}/>
+                </Center> 
 
                 {/* Message Submit */}
-                
+                <Center m="auto" w="50%" my="2rem">
+                    <Input placeholder="Enter Message" onChange={handleMessageChange}/>
+                    <Button bgColor="#2EC4B6" color="#FDFFFC" onClick={handleMessageSubmit}>Submit</Button>
+                </Center>
             </div>
         );
     }
