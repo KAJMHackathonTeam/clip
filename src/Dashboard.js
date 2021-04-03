@@ -3,27 +3,27 @@ import Topper from './Topper';
 import { searchJSONArray } from './functions/searchJSON'
 import { Input, IconButton, Center, Button, Flex } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
-<<<<<<< HEAD
 import Amplify,{ Auth} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
-=======
+
 import { DataStore } from '@aws-amplify/datastore';
 import { Response, Message, Organization, User } from './models';
 
 import MessageBoard from './MessageBoard';
->>>>>>> f115dc55fc8045e36a5ae3eddf5c40c3651f84d7
 
 class Dashboard extends React.Component {
     constructor(props){
         super(props)
         this.state = {
             message: '',
-            searchQuery: ''
+            searchQuery: '',
+            messages: [],
+            activeMessages: []
         }
         
         this.handleSearchChange = this.handleSearchChange.bind(this)
         this.handleMessageChange = this.handleMessageChange.bind(this)
-
+        this.catchMessages = this.catchMessages.bind(this)
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
         this.handleMessageSubmit = this.handleMessageSubmit.bind(this)
     }
@@ -35,6 +35,7 @@ class Dashboard extends React.Component {
     handleMessageChange(event) {
        this.setState({message: event.target.value});
     }
+
 
     async handleSearchSubmit(event) {
         //fetch Messages
@@ -79,7 +80,7 @@ class Dashboard extends React.Component {
                     <Button bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleMessageSubmit}>Submit</Button>
                 </Center>
 
-                <MessageBoard/>
+                <MessageBoard messages = {this.state.message}/>
             </div>
         );
     }
