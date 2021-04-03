@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-clip-dev-123519-authRole",
+      "UnauthRoleArn": "arn:aws:iam::819602147126:role/amplify-clip-dev-123519-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::819602147126:role/amplify-clip-dev-123519-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-clip-dev-123519-deployment",
+      "UnauthRoleName": "amplify-clip-dev-123519-unauthRole",
+      "StackName": "amplify-clip-dev-123519",
+      "StackId": "arn:aws:cloudformation:us-east-1:819602147126:stack/amplify-clip-dev-123519/f753f720-94a2-11eb-aedd-0e8b433be3dd",
+      "AmplifyAppId": "d1j5mewluzppiw"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1j5mewluzppiw",
+          "type": "manual"
+        }
+      },
+      "auth": {
+        "clip14b85c4f": {}
+      }
+    }
+  }
+}
