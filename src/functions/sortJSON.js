@@ -5,9 +5,9 @@ var IS_DEBUG = false;
 
 
 /**
- * Sorting function
- * Takes array of JSON objects, sortkey, sort order, and sorts the array
- * Pass by reference (modifies the original array)
+ * Sorting function.
+ * Takes array of JSON objects, sortkey, sort order, and sorts the array.
+ * Pass by reference (modifies the original array).
  * @param {Array} arr array that needs to be sorted
  * @param {String} sortKey JSON key to sort the arry
  * @param {boolean} isForward true = normal sort, false = reverse sort
