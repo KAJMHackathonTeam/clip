@@ -2,7 +2,7 @@ import React from 'react';
 import Topper from './Topper';
 import { Input, IconButton, Center, Button, Flex } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
-
+import MessageBoard from './MessageBoard';
 
 class Dashboard extends React.Component {
     constructor(props){
@@ -25,11 +25,11 @@ class Dashboard extends React.Component {
        this.setState({message: event.Button});
     }
 
-    handleSearchSubmit(event) {
+    handleSearchSubmit() {
         
     }
 
-    handleMessageSubmit(event) {
+    handleMessageSubmit() {
         
     }
 
@@ -49,6 +49,8 @@ class Dashboard extends React.Component {
                     <Input placeholder="Enter Message" onChange={this.handleMessageChange}/>
                     <Button bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleMessageSubmit}>Submit</Button>
                 </Center>
+
+                <MessageBoard/>
             </div>
         );
     }
