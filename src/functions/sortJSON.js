@@ -23,7 +23,6 @@ function sortJSONArray(arr, sortKey, isForward=true) {
     }
 }
 
-
 //Comparer Functions 
 function getCompForward(key) {    
     return function(a, b) {    
