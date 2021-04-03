@@ -6,6 +6,7 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { DataStore } from '@aws-amplify/datastore';
 import { Response, Message, Organization, User } from './models';
 
+import MessageBoard from './MessageBoard';
 
 class Dashboard extends React.Component {
     constructor(props){
