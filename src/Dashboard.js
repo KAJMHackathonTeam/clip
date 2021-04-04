@@ -10,7 +10,7 @@ import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 import * as queries from './graphql/queries';
 import * as mutations from './graphql/mutations';
 import * as subscriptions from './graphql/subscriptions';
-import { Amplify, Auth} from 'aws-amplify'
+import { Amplify, Auth, API} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
 import MessageBoard from './MessageBoard';
 import { DataStore } from '@aws-amplify/datastore';
@@ -33,6 +33,7 @@ class Dashboard extends React.Component {
             targetOrg: '',
             targetSubject: '',
             responses: [],
+            organizations: []
         }
         
         this.handleSearchChange = this.handleSearchChange.bind(this)
@@ -64,7 +65,7 @@ class Dashboard extends React.Component {
 
         let organizations = await API.graphql({ query: queries.listOrganizations})
         organizations = organizations.data.listOrganizations.items
-
+        this.setState({organizations: organizations})
 
         let responses = await API.graphql({ query: queries.listResponses})
         responses = responses.data.listResponses.items
@@ -215,10 +216,10 @@ class Dashboard extends React.Component {
                 response = {
                         "response": response["data"].body,
                         "messageID": searchID,
-                        "user": "Clip! Aid",
+                        "user": "Clip! Bot",
                         "time": time
                 }
-                await API.graphql({query: mutations.createResponse, variables: {input: response}})
+                API.graphql({query: mutations.createResponse, variables: {input: response}})
                 .then(() => {
                     alert('Question Asked')
                     window.location.reload()
@@ -239,8 +240,14 @@ class Dashboard extends React.Component {
         this.setState({activeMessages: sortJSONArray(this.state.activeMessages.copyWithin(), "time", false) });
         
     }
-
-
+    getOrgName(id){
+        let models = this.state.organizations
+        for (var i = 0; i < models.length; i ++){
+            if (models[i].id === id){
+                return models[i].name
+            }
+        }
+    }
     render(){
         return(
             <div>
@@ -292,6 +299,7 @@ class Dashboard extends React.Component {
                                         <Flex justify="space-between">
                                             <Flex>
                                                 <Text fontWeight="bold">{message.user}</Text>
+                                                <Text marginLeft=".5rem" fontWeight="light">{this.getOrgName(message.organization)}</Text>
                                                 <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
                                             </Flex>
                                             <IconButton bgColor="red" color="white" onClick={() => this.deleteMessage(message.id)} icon={<CloseIcon/>}/>

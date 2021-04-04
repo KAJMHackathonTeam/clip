@@ -47,7 +47,6 @@ class Organizations extends React.Component {
                 exists = true
             }
         }
-        console.log(organization)
 
         let users = []
         for (var i = 0; i < organization.users.length; i ++){
@@ -70,6 +69,16 @@ class Organizations extends React.Component {
                 inOrg.push(organizations[i])
             }
         }
+        for (var j = 0; j < inOrg.length; j++){
+            let users = []
+            for (var i = 0; i < inOrg[j].users.length; i ++){
+                users.push(inOrg[j].users[i])
+            }
+            let uniqueUsers = [...new Set (users)]
+            users = uniqueUsers
+            inOrg[j].users = users
+        }
+        
         this.setState({inOrg: inOrg})
     }
     onNameChange(e){
@@ -148,29 +157,30 @@ class Organizations extends React.Component {
                             <Form.Label>Current Users</Form.Label>
                             {this.state.users.map(user => {
                                 return(
-                                    <div key = {user}><p><strong>{user}</strong></p></div>
+                                    <div style = {{marginLeft: '1rem'}} key = {user}><p><strong>{user}</strong></p></div>
                                 )
                             })}<br/>
                         </Form.Group><br/>
                         <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.handleSubmit}>Submit</Button>
                     </Form> 
                 </Jumbotron>
+                <CardColumns style = {{columns: 'auto'}}>
                 {this.state.inOrg.map((org) => (
-                     <div key = {org.id}>
-                     <Card  style={{ width: '18rem' }}> 
+                     <div key = {org.id} >
+                     <Card  style={{ width: '18rem', margin: '5vw' }} > 
                          <Card.Body>
                              <Card.Title>{org.name}</Card.Title>
                              <Card.Text>
-                                 Users: 
+                                 <strong>Users:</strong>
                                  {org.users.map((user) => (
-                                     <p>{user}</p>
+                                     <p style = {{marginLeft: '1rem'}}  key = {user}>{user}</p>
                                  ))}
                              </Card.Text>
-                         </Card.Body>
-                         <Button style = {{backgroundColor: 'red', borderColor:"red", width: '18rem'}} disabled onClick = {() => this.deletePatient(patient.id)}>Delete</Button>                            
+                         </Card.Body>                         
                      </Card>
                      </div>
                 ))}
+                </CardColumns>
             </>
         );
     }
