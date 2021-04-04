@@ -7,6 +7,7 @@ import Amplify, {Auth} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
 import { DataStore } from '@aws-amplify/datastore';
 import { Organization } from './models';
+import "./Organizations.css";
 
 class Organizations extends React.Component {
     constructor(props){
@@ -109,31 +110,31 @@ class Organizations extends React.Component {
     render(){
         return(
             <>
-                <Topper/>
-                <Jumbotron style = {{margin: '50px'}}>
-                    <Text fontSize="5xl">Manage Organizations</Text><br/>
-                   <Form id = 'CreateOrganizations'>
-                        <Form.Group controlId="formName">
-                            <Form.Label>Organization Name</Form.Label><br/>
-                            <Form.Control type = 'text' onChange = {this.onNameChange} value = {this.state.name} />
-                        </Form.Group>
-                        <Form.Group controlId="formUsers">
-                            <Form.Label>Users</Form.Label><br/>
-                            <Flex style = {{display:'flex'}}>
-                                <Form.Control type = 'text' onChange = {this.onUserChange} value = {this.state.user} />
-                                <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.onUserSubmit}>Enter User</Button>
-                            </Flex>
-                                <br/>
-                            <Form.Label>Current Users</Form.Label>
-                            {this.state.users.map(user => {
-                                return(
-                                    <div key = {user}><p><strong>{user}</strong></p></div>
-                                )
-                            })}<br/>
-                        </Form.Group><br/>
-                        <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.handleSubmit}>Submit</Button>
-                    </Form> 
-                </Jumbotron>
+            <Topper/>
+            <Jumbotron style = {{margin: '50px'}}>
+                <Text fontSize="5xl">Manage Organizations</Text><br/>
+            <Form id = 'CreateOrganizations'>
+                    <Form.Group controlId="formName">
+                        <Form.Label>Organization Name</Form.Label><br/>
+                        <Form.Control type = 'text' onChange = {this.onNameChange} value = {this.state.name} />
+                    </Form.Group>
+                    <Form.Group controlId="formUsers">
+                        <Form.Label>Users</Form.Label><br/>
+                        <Flex style = {{display:'flex'}}>
+                            <Form.Control type = 'text' onChange = {this.onUserChange} value = {this.state.user} />
+                            <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.onUserSubmit}>Enter User</Button>
+                        </Flex>
+                            <br/>
+                        <Form.Label>Current Users</Form.Label>
+                        {this.state.users.map(user => {
+                            return(
+                                <div key = {user}><p><strong>{user}</strong></p></div>
+                            )
+                        })}<br/>
+                    </Form.Group><br/>
+                    <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.handleSubmit}>Submit</Button>
+                </Form> 
+            </Jumbotron>
             </>
         );
     }

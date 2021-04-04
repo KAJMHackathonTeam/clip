@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
 
 body {
   font-family: 'Open Sans', sans-serif;
@@ -46,5 +46,7 @@ body {
 #main {
   color: #fdfffc;
   background: #011627;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
 }
+
+
