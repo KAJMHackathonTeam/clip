@@ -227,12 +227,14 @@ class Dashboard extends React.Component {
                     > {this.state.activeMessages.map((message, index) => (
                         <div key = {message.id} style = {{margin:"1rem"}}>
                             <Center>
-                                <Box bgColor="#011627" color="#FDFFFC" width="80vw" height="auto" minHeight="5rem" borderRadius="2%" padding="1rem"> 
-                                <SearchIcon onClick = {this.deleteMessage(message.id)}/>
+                                <Box bgColor="#011627" color="#FDFFFC" width="80vw" height="auto" minHeight="5rem" borderRadius="10px" padding="1rem"> 
                                     <Box marginBottom = "1rem">
-                                        <Flex>
-                                            <Text fontWeight="bold">{message.user}</Text>
-                                            <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
+                                        <Flex justify="space-between">
+                                            <Flex>
+                                                <Text fontWeight="bold">{message.user}</Text>
+                                                <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
+                                            </Flex>
+                                            <IconButton bgColor="red" color="white" onClick={this.deleteMessage(message.id)} icon={<CloseIcon/>}/>
                                         </Flex>
                                         
                                         <Text mt=".5rem">{message.message}</Text>
