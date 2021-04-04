@@ -5,7 +5,7 @@ import { Box, Text, Flex, Center } from "@chakra-ui/react";
 
 const messages = [{}];
 const messagesList = messages.map((number) => 
-    <Box bgColor="#011627" color="#FDFFFC" width="40rem" height="auto" minHeight="5rem" borderRadius="2%" padding="1rem"> 
+    <Box mx="2rem" bgColor="#011627" color="#FDFFFC" width="40rem" height="auto" minHeight="5rem" minWidth="10rem" borderRadius="2%" padding="1rem"> 
         <Flex>
             <Text fontWeight="bold">User Name</Text>
             <Text marginLeft=".5rem" fontWeight="light">Message Date</Text>
