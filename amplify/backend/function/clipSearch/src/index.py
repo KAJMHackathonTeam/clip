@@ -27,7 +27,7 @@ def googleSearch(query):
     str1 = ""
     for i in a:
         str1 += i
-        str1 += "\n"
+        str1 += "   "
     return str1
 
 def khanSearch(query):
