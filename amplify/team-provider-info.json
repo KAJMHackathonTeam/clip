@@ -20,6 +20,12 @@
       },
       "auth": {
         "clip14b85c4f": {}
+      },
+      "function": {
+        "clipSearch": {
+          "deploymentBucketName": "amplify-clip-dev-123519-deployment",
+          "s3Key": "amplify-builds/clipSearch-5463634748584c63616d-build.zip"
+        }
       }
     }
   }
