@@ -21,6 +21,8 @@ function sortJSONArray(arr, sortKey, isForward=true) {
     {
         arr.sort(getCompReverse(sortKey))
     }
+
+    return arr
 }
 
 //Comparer Functions 
@@ -84,7 +86,7 @@ function main()
     
     console.log("------------------------------------------------------------")
     
-    sortJSONArray(arr=JSONarr, sortKey="Likes", isForward=false)
+    sortJSONArray(JSONarr, "Likes", false)
 
     console.log(JSONarr)
 }

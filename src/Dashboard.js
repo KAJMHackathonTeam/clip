@@ -1,6 +1,7 @@
 import React from 'react';
 import Topper from './Topper';
 import { searchJSONArray } from './functions/searchJSON'
+import { sortJSONArray } from './functions/sortJSON'    
 import { Input, IconButton, Center, Button, Flex, Box, Select, Text } from '@chakra-ui/react';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios'
@@ -40,6 +41,7 @@ class Dashboard extends React.Component {
 
         this.handleReplyChange = this.handleReplyChange.bind(this)
         this.handleReplySubmit = this.handleReplySubmit.bind(this)
+        this.handleSortChange = this.handleSortChange.bind(this)
     }
     async componentDidMount(){
         
@@ -210,6 +212,15 @@ class Dashboard extends React.Component {
         }
         
     }
+
+    handleSortChange(event) {
+        console.log(event.target.value)
+
+        this.setState({activeMessages: sortJSONArray(this.state.activeMessages.copyWithin(), "time", false) });
+        
+    }
+
+
     render(){
         return(
             <div>
@@ -234,6 +245,16 @@ class Dashboard extends React.Component {
                         </Select>
                         <Button bgColor="#2EC4B6" color="#FDFFFC" isLoading={this.state.clicked === true ? "true" : ""} onClick={this.handleMessageSubmit}>Submit</Button>
                     </Center>
+
+                    {/*Message sort*/}
+                    <Center m="auto" w="80%" my="2rem">
+                        <Select bgColor = "white" name = "sort-select" id="sort-select" width="30rem" placeholder="Sort by" onChange={this.handleSortChange} >
+                            {["Time"].map((category) => (
+                                <option key={category} value = {category}>{category}</option>
+                            ))}
+                        </Select>
+                    </Center>
+
                 </Jumbotron>
 
                 <div>
