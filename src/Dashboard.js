@@ -23,6 +23,7 @@ class Dashboard extends React.Component {
             reply: {},
             searchQuery: '',
             messages: [],
+            clicked: false,
             inOrg: [],
             activeMessages: [],
             targetOrg: '',
@@ -55,7 +56,6 @@ class Dashboard extends React.Component {
         const messageAll = await DataStore.query(Message);
         const organizations = await DataStore.query(Organization);
         const responses = await DataStore.query(Response);
-        console.log(responses)
         let messages = [];
         let inOrg = [];
         let fullOrgs = []
@@ -77,12 +77,27 @@ class Dashboard extends React.Component {
         this.setState({activeMessages: messages})
         this.setState({responses: responses})
 
-        console.log(this.state.responses);
-
     }
 
-    deleteMessage(id){
+    async deleteMessage(id){
         //delete message and all responses associated
+        const modelToDelete = await DataStore.query(Message, id);
+        DataStore.delete(modelToDelete);
+
+        var toDelete = []
+        for (var i = 0; i < this.state.responses.length; i ++){
+            if (this.state.responses[i].messageID === id){
+                toDelete.push(this.state.responses[i])
+            }
+        }
+        for (i = 0; i < toDelete.length; i ++){
+            DataStore.delete(toDelete[i])
+        }
+        const testCheck = await DataStore.query(Response)
+        .then(() => {
+        window.location.reload()
+        });
+    
     }
     renderReply(message, reply)
     {
@@ -151,6 +166,7 @@ class Dashboard extends React.Component {
 
     async handleMessageSubmit() {
         if (this.state.message !== "" && this.state.targetSubject !== "" && this.state.targetOrg !== ""){
+        this.setState({clicked: true})
         var time = (new Date()).toString()
         await DataStore.save(
             new Message({
@@ -174,7 +190,6 @@ class Dashboard extends React.Component {
         axios
             .post(api, data)
             .then((response) => {
-                console.log(response)
                 DataStore.save(
                     new Response({
                         "response": response["data"].body,
@@ -217,7 +232,7 @@ class Dashboard extends React.Component {
                                 <option key = {org.id} value={org.id}>{org.name}</option>
                             )}
                         </Select>
-                        <Button bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleMessageSubmit}>Submit</Button>
+                        <Button bgColor="#2EC4B6" color="#FDFFFC" isLoading={this.state.clicked === true ? "true" : ""} onClick={this.handleMessageSubmit}>Submit</Button>
                     </Center>
                 </Jumbotron>
 
@@ -233,18 +248,12 @@ class Dashboard extends React.Component {
                             <Center>
                                 <Box bgColor="#011627" color="#FDFFFC" width="80vw" height="auto" minHeight="5rem" borderRadius="10px" padding="1rem"> 
                                     <Box marginBottom = "1rem">
-<<<<<<< HEAD
                                         <Flex justify="space-between">
                                             <Flex>
                                                 <Text fontWeight="bold">{message.user}</Text>
                                                 <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
                                             </Flex>
-                                            <IconButton bgColor="red" color="white" onClick={this.deleteMessage(message.id)} icon={<CloseIcon/>}/>
-=======
-                                        <Flex>
-                                            <Text fontWeight="bold">{message.user}:</Text>
-                                            <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
->>>>>>> 6afe6adadaafeabebf9c230906ec3d232ec02ae8
+                                            <IconButton bgColor="red" color="white" onClick={() => this.deleteMessage(message.id)} icon={<CloseIcon/>}/>
                                         </Flex>
                                         
                                         <Text mt=".5rem">{message.message}</Text>

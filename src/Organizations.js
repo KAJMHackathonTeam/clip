@@ -35,7 +35,6 @@ class Organizations extends React.Component {
           }
         
         const organizations = await DataStore.query(Organization);
-        console.log(organizations)
         let organization;
         let exists = false;
         for(var i = 0; i < organizations.length; i ++){
@@ -55,11 +54,9 @@ class Organizations extends React.Component {
 
     }
     onNameChange(e){
-        console.log(this.state.users)
         this.setState({name: e.target.value})
     }
     onUserChange(e){
-        console.log(this.state.users)
         this.setState({user: e.target.value})
     }
     onUserSubmit(){
