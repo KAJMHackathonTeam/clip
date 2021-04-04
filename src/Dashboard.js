@@ -1,18 +1,18 @@
 import React from 'react';
 import Topper from './Topper';
 import { searchJSONArray } from './functions/searchJSON'
-import { Input, IconButton, Center, Button, Flex, Box, Text } from '@chakra-ui/react';
+import { Input, IconButton, Center, Button, Flex, Box, Select, Text } from '@chakra-ui/react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Jumbotron } from 'react-bootstrap';
 import { SearchIcon } from '@chakra-ui/icons';
-import Amplify,{ Auth} from 'aws-amplify'
+import { Amplify, Auth} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
 
 import { DataStore } from '@aws-amplify/datastore';
 import { Response, Message, Organization, User } from './models';
 
-import MessageBoard from './MessageBoard';
-
+let organizations = [{}];
+let subjects = [{}];
 class Dashboard extends React.Component {
     constructor(props){
         super(props)
@@ -20,12 +20,16 @@ class Dashboard extends React.Component {
             message: '',
             searchQuery: '',
             messages: [],
-            activeMessages: []
+            activeMessages: [],
+            targetOrg: '',
+            targetSubject: '',
         }
         
         this.handleSearchChange = this.handleSearchChange.bind(this)
         this.handleMessageChange = this.handleMessageChange.bind(this)
-        
+        this.handleOrganizationSelectChange = this.handleOrganizationSelectChange.bind(this)
+        this.handleSubjectSelectChange = this.handleSubjectSelectChange.bind(this)
+
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
         this.handleMessageSubmit = this.handleMessageSubmit.bind(this)
     }
@@ -66,7 +70,14 @@ class Dashboard extends React.Component {
     handleMessageChange(event) {
        this.setState({message: event.target.value});
     }
+    
+    handleOrganizationSelectChange(event) {
+        this.setState({targetOrg: event.target.value})
+    }
 
+    handleSubjectSelectChange(event) {
+        this.setState({targetSubject: event.target.value})
+    }
 
     async handleSearchSubmit() {
         if (this.state.searchQuery !== ""){
@@ -104,17 +115,27 @@ class Dashboard extends React.Component {
                 <Topper/>
                 
                 <Jumbotron style = {{margin: '50px'}}> 
-                {/* Search Bar */}
-                <Center m="auto" w="50%" my="2rem">
-                    <Input placeholder="Search" onChange={this.handleSearchChange} /> 
-                    <IconButton bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleSearchSubmit} icon={<SearchIcon/>}/>
-                </Center> 
+                    {/* Search Bar */}
+                    <Center m="auto" w="50%" my="2rem">
+                        <Input bgColor="white" placeholder="Search" onChange={this.handleSearchChange} /> 
+                        <IconButton bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleSearchSubmit} icon={<SearchIcon/>}/>
+                    </Center> 
 
-                {/* Message Submit */}
-                <Center m="auto" w="50%" my="2rem">
-                    <Input placeholder="Enter Message" onChange={this.handleMessageChange}/>
-                    <Button bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleMessageSubmit}>Submit</Button>
-                </Center>
+                    {/* Message Submit */}
+                    <Center m="auto" w="50%" my="2rem">
+                        <Input bgColor="white" placeholder="Enter Message" onChange={this.handleMessageChange}/>
+                        <Select bgColor="white" name="subject-select" id="subject-select" width="15rem" placeholder="Organization" onChange={this.handleSubjectSelectChange}>
+                            {organizations.map((org) => 
+                                <option value={org}>org</option>
+                            )}
+                        </Select>
+                        <Select bgColor="white" name="organization-select" id="organization-select" width="15rem" placeholder="Subject" onChange={this.handleOrganizationSelectChange}>
+                            {subjects.map((org) => 
+                                <option value={org}>org</option>
+                            )}
+                        </Select>
+                        <Button bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleMessageSubmit}>Submit</Button>
+                    </Center>
                 </Jumbotron>
 
                 <div>
@@ -127,9 +148,11 @@ class Dashboard extends React.Component {
                                 </Flex>
 
                                 <Text mt=".5rem">{message.message}</Text>
+                                <Input mt=".5rem" bgColor="white" placeholder="Reply"/>
                             </Box>
                         )}
                     </Center>
+
                 </div>
             </div>
         );
