@@ -49,10 +49,13 @@ class Organizations extends React.Component {
             this.setState({name: organization.name})
             this.setState({id: organization.id})
             this.setState({exists: true})
+        }else{
+            this.setState({users: [username]})
         }
 
     }
     onNameChange(e){
+        console.log(this.state.users)
         this.setState({name: e.target.value})
     }
     onUserChange(e){
@@ -60,7 +63,10 @@ class Organizations extends React.Component {
         this.setState({user: e.target.value})
     }
     onUserSubmit(){
-        let users = this.state.users
+        let users = []
+        for (var i = 0; i < this.state.users.length; i ++){
+            users.push(this.state.users[i])
+        }
         if(this.state.user !== ""){
             users.push(this.state.user)
             let uniqueUsers = [...new Set (users)]
@@ -79,9 +85,10 @@ class Organizations extends React.Component {
             }))
             .then(() => {
                 alert("Organization Updated")
-                //window.location.reload();
+                window.location.reload();
               })
         }else{
+
             await DataStore.save(
                 new Organization({
                     "name": this.state.name,
@@ -91,7 +98,7 @@ class Organizations extends React.Component {
             )
             .then(() => {
                 alert("Organization Created")
-                //window.location.reload();
+                window.location.reload();
               })
         }
         }catch{
@@ -102,7 +109,7 @@ class Organizations extends React.Component {
         return(
             <>
                 <Topper/>
-                <Jumbotron style = {{margin: '10px'}}>
+                <Jumbotron style = {{margin: '50px'}}>
                     <Text fontSize="5xl">Manage Organizations</Text><br/>
                    <Form id = 'CreateOrganizations'>
                         <Form.Group controlId="formName">
