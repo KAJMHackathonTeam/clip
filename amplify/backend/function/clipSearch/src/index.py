@@ -2,19 +2,7 @@ import json
 import wolframalpha
 from googlesearch import search
 
-def handler(event, context):
-  print('received event:')
-  print(event)
-  
-  return {
-      'statusCode': 200,
-      'headers': {
-          'Access-Control-Allow-Headers': '*',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-      },
-      'body': json.dumps('Hello from your new Amplify Python lambda!')
-  }
+
 
 templateString = "https://www.khanacademy.org/search?referer=%2F&page_search_query={}"
 
@@ -46,3 +34,13 @@ def createKhanLink(query):
     query = query.replace(" ", "+")
     link = templateString.format(query)
     return link
+
+def handler(event, context):
+  a = getResult(event["query"])
+  return {
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": a
+    }
