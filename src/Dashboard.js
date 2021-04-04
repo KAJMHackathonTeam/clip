@@ -48,11 +48,14 @@ class Dashboard extends React.Component {
 
         const messageAll = await DataStore.query(Message);
         const organizations = await DataStore.query(Organization);
+        console.log(messageAll)
         let messages = [];
         let inOrg = [];
         let fullOrgs = []
         for (var i = 0; i < organizations.length; i ++){
+            
             if (organizations[i].users.indexOf(username) !== -1){
+                console.log(organizations[i], "in")
                 inOrg.push(organizations[i].id)
                 fullOrgs.push(organizations[i])
             }
@@ -60,12 +63,14 @@ class Dashboard extends React.Component {
         this.setState({inOrg: fullOrgs})
 
         for (i = 0; i < messageAll.length; i++){
+            console.log(messageAll[i])
             if (inOrg.indexOf(messageAll[i].organization) !== -1){
                 messages.push(messageAll[i])
             }
         }
-
         this.setState({messages: messages})
+        this.setState({activeMessages: messages})
+        console.log(messages)
 
     }
     handleSearchChange(event) {
@@ -134,7 +139,7 @@ class Dashboard extends React.Component {
                     <Center m="auto" w="50%" my="2rem">
                         <Input bgColor="white" placeholder="Enter Message" onChange={this.handleMessageChange}/>
                         <Input bgColor="white" placeholder="Subject" onChange={this.handleSubjectChange} width="15rem"/>
-                        <Select bgColor="white" name="subject-select" id="subject-select" width="15rem" placeholder="Organization" onChange={this.handleSubjectSelectChange}>
+                        <Select bgColor="white" name="organization-select" id="subject-select" width="15rem" placeholder="Organization" onChange={this.handleOrganizationSelectChange}>
                             {this.state.inOrg.map((org) => 
                                 <option key = {org.id} value={org.id}>{org.name}</option>
                             )}
@@ -156,7 +161,6 @@ class Dashboard extends React.Component {
                                     <Text mt=".5rem">{message.message}</Text>
                                 </Box>
                                 
-
                                 <Box>
                                     <Flex>
                                         <Input placeholder="Reply" onChange={this.handleReplyChange}></Input>
