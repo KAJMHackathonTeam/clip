@@ -36,11 +36,15 @@ def createKhanLink(query):
     return link
 
 def handler(event, context):
-  a = getResult(event["query"])
-  return {
+    print(event)
+    a = getResult(event["query"])
+    return {
         "statusCode": 200,
         "headers": {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": True,
         },
         "body": a
     }

@@ -3,6 +3,7 @@ import Topper from './Topper';
 import { searchJSONArray } from './functions/searchJSON'
 import { Input, IconButton, Center, Button, Flex, Box, Select, Text } from '@chakra-ui/react';
 import 'bootstrap/dist/css/bootstrap.css';
+import axios from 'axios'
 import { Jumbotron } from 'react-bootstrap';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Amplify, Auth} from 'aws-amplify'
@@ -108,18 +109,50 @@ class Dashboard extends React.Component {
     }
 
     async handleMessageSubmit() {
-        console.log("message submit" ,this.state)
-        
+        if (this.state.message !== "" && this.state.targetSubject !== "" && this.state.targetOrg !== ""){
+        var time = (new Date()).toString()
         await DataStore.save(
             new Message({
                 "message": this.state.message,
                 "subject": this.state.targetSubject,
                 "organization": this.state.targetOrg,
-                "user": this.state.message,
-                "time": (new Date()).toString()
+                "user": this.state.username,
+                "time": time
             })
         );
         
+        const models = await DataStore.query(Message);
+        var searchID;
+        for (var i = 0; i < models.length; i++){
+            if (models[i].message === this.state.message && models[i].user === this.state.username && models[i].time === time){
+                searchID = models[i].id
+            }
+        }
+
+        const api = 'https://agu8mq4047.execute-api.us-east-1.amazonaws.com/staging'
+        const data = {"query" : this.state.message}
+        const headers = {'Access-Control-Allow-Origin': '*'}
+        axios
+            .post(api, headers, data)
+            .then((response) => {
+                console.log(response)
+                DataStore.save(
+                    new Response({
+                        "response": response,
+                        "messageID": searchID,
+                        "user": "Clip! Aid",
+                        "time": time
+                    })
+                ).then(() => {
+                    alert('Question Asked')
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+        }else{
+            alert("Please fill out all fields")
+        }
         
     }
 
