@@ -22,11 +22,11 @@ class MessageBoard extends React.Component {
                 {this.state.messages.map((message) => 
                     <Box bgColor="#011627" color="#FDFFFC" width="40rem" height="auto" minHeight="5rem" borderRadius="2%" padding="1rem"> 
                         <Flex>
-                            <Text fontWeight="bold">User Name</Text>
-                            <Text marginLeft=".5rem" fontWeight="light">Message Date</Text>
+                            <Text fontWeight="bold">{message.user}</Text>
+                            <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
                         </Flex>
 
-                        <Text mt=".5rem">Message Content</Text>
+                        <Text mt=".5rem">{message.message}</Text>
                     </Box>
                 )}
               </Center>

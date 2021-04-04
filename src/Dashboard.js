@@ -1,7 +1,7 @@
 import React from 'react';
 import Topper from './Topper';
 import { searchJSONArray } from './functions/searchJSON'
-import { Input, IconButton, Center, Button, Flex } from '@chakra-ui/react';
+import { Input, IconButton, Center, Button, Flex, Box, Text } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import Amplify,{ Auth} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
@@ -17,13 +17,12 @@ class Dashboard extends React.Component {
         this.state = {
             message: '',
             searchQuery: '',
-            messages: [],
-            activeMessages: []
+            messages: []
         }
         
         this.handleSearchChange = this.handleSearchChange.bind(this)
         this.handleMessageChange = this.handleMessageChange.bind(this)
-        this.catchMessages = this.catchMessages.bind(this)
+        
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
         this.handleMessageSubmit = this.handleMessageSubmit.bind(this)
     }
@@ -45,6 +44,7 @@ class Dashboard extends React.Component {
         console.log('message: ', this.state.searchQuery);
         console.log('all: ', models);
         console.log('search: ', result);
+        this.setState({messages: result})
     }
 
     async handleMessageSubmit(event) {
@@ -80,7 +80,20 @@ class Dashboard extends React.Component {
                     <Button bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleMessageSubmit}>Submit</Button>
                 </Center>
 
-                <MessageBoard messages = {this.state.message}/>
+                <div>
+                    <Center>
+                        {this.state.messages.map((message) => 
+                            <Box bgColor="#011627" color="#FDFFFC" width="40rem" height="auto" minHeight="5rem" borderRadius="2%" padding="1rem"> 
+                                <Flex>
+                                    <Text fontWeight="bold">{message.user}</Text>
+                                    <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
+                                </Flex>
+
+                                <Text mt=".5rem">{message.message}</Text>
+                            </Box>
+                        )}
+                    </Center>
+                </div>
             </div>
         );
     }
