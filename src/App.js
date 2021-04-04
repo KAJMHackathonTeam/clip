@@ -6,7 +6,7 @@ import {
   Switch
 } from "react-router-dom";
 import Landing from './Landing.js'
-import Dashboard from './Dashboard.js'
+import Dashboard from './NewDashboard.js'
 import Organizations from './Organizations.js'
 import { DataStore } from '@aws-amplify/datastore';
 // eslint-disable-next-line
