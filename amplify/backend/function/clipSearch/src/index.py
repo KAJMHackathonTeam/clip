@@ -7,7 +7,7 @@ from googlesearch import search
 templateString = "https://www.khanacademy.org/search?referer=%2F&page_search_query={}"
 
 def getResult(question):
-    app_id = 'GEUQQW-H3AXJRHRK4'
+    app_id = 'GEUQQW-HA6VURP28L'
     if 'googleQ' in question:
         return googleSearch(question)
     if 'learn' in question:
@@ -24,7 +24,11 @@ def getResult(question):
 
 def googleSearch(query):
     a = list(search(query, tld="co.in", num=10, stop=10, pause=2))
-    return a
+    str1 = ""
+    for i in a:
+        str1 += i
+        str1 += "\n"
+    return str1
 
 def khanSearch(query):
     return createKhanLink(query)

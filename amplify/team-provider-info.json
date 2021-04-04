@@ -24,7 +24,7 @@
       "function": {
         "clipSearch": {
           "deploymentBucketName": "amplify-clip-dev-123519-deployment",
-          "s3Key": "amplify-builds/clipSearch-764e532f443654484a4a-build.zip"
+          "s3Key": "amplify-builds/clipSearch-496a3068694758535a77-build.zip"
         }
       }
     }

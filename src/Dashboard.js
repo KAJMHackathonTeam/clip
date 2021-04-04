@@ -5,7 +5,7 @@ import { Input, IconButton, Center, Button, Flex, Box, Select, Text } from '@cha
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios'
 import { Jumbotron } from 'react-bootstrap';
-import { SearchIcon } from '@chakra-ui/icons';
+import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 import { Amplify, Auth} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
 import MessageBoard from './MessageBoard';
@@ -34,7 +34,6 @@ class Dashboard extends React.Component {
         this.handleMessageChange = this.handleMessageChange.bind(this)
         this.handleOrganizationSelectChange = this.handleOrganizationSelectChange.bind(this)
         this.handleSubjectChange = this.handleSubjectChange.bind(this)
-
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
         this.handleMessageSubmit = this.handleMessageSubmit.bind(this)
 
@@ -56,7 +55,7 @@ class Dashboard extends React.Component {
         const messageAll = await DataStore.query(Message);
         const organizations = await DataStore.query(Organization);
         const responses = await DataStore.query(Response);
-
+        console.log(responses)
         let messages = [];
         let inOrg = [];
         let fullOrgs = []
@@ -82,14 +81,17 @@ class Dashboard extends React.Component {
 
     }
 
-
+    deleteMessage(id){
+        //delete message and all responses associated
+    }
     renderReply(message, reply)
     {
         if(message.id == reply.messageID)
-            return (<Flex>
-                         <Text> {reply.response} </Text>
-
-                   </Flex>)
+            return (<div key = {reply.id}>
+                        <Flex padding = "1rem">
+                            <Text marginLeft=".5rem"><strong>{reply.user}</strong>:   {reply.response}</Text>
+                        </Flex>
+                   </div>)
         return;
     }
 
@@ -136,10 +138,6 @@ class Dashboard extends React.Component {
     async handleSearchSubmit() {
         if (this.state.searchQuery !== ""){
             var result = searchJSONArray(this.state.messages, 'message', this.state.searchQuery)
-<<<<<<< HEAD
-=======
-
->>>>>>> db40aa6ea260684312921191290d1ba998bc32fb
             this.setState({activeMessages: result})
         }
         else{
@@ -169,9 +167,8 @@ class Dashboard extends React.Component {
 
         const api = 'https://agu8mq4047.execute-api.us-east-1.amazonaws.com/staging'
         const data = {"query" : this.state.message}
-        const headers = {'Access-Control-Allow-Origin': '*'}
         axios
-            .post(api, headers, data)
+            .post(api, data)
             .then((response) => {
                 console.log(response)
                 DataStore.save(
@@ -183,6 +180,7 @@ class Dashboard extends React.Component {
                     })
                 ).then(() => {
                     alert('Question Asked')
+                    window.location.reload()
                 })
             })
             .catch((error) => {
@@ -191,7 +189,7 @@ class Dashboard extends React.Component {
         }else{
             alert("Please fill out all fields")
         }
-        window.location.reload();
+        
     }
     render(){
         return(
@@ -199,17 +197,18 @@ class Dashboard extends React.Component {
                 <Topper/>
                 
                 <Jumbotron style = {{margin: '50px'}}> 
+                    <Text fontSize="5xl">Dashboard</Text><br/>
                     {/* Search Bar */}
-                    <Center m="auto" w="50%" my="2rem">
+                    <Center m="auto" w="80%" my="2rem">
                         <Input bgColor="white" placeholder="Search" onChange={this.handleSearchChange} /> 
                         <IconButton bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleSearchSubmit} icon={<SearchIcon/>}/>
                     </Center> 
 
                     {/* Message Submit */}
-                    <Center m="auto" w="50%" my="2rem">
+                    <Center m="auto" w="80%" my="2rem">
                         <Input bgColor="white" placeholder="Enter Message" onChange={this.handleMessageChange}/>
                         <Input bgColor="white" placeholder="Subject" onChange={this.handleSubjectChange} width="15rem"/>
-                        <Select bgColor="white" name="organization-select" id="subject-select" width="15rem" placeholder="Organization" onChange={this.handleOrganizationSelectChange}>
+                        <Select bgColor="white" name="organization-select" id="subject-select" width="30rem" placeholder="Organization" onChange={this.handleOrganizationSelectChange}>
                             {this.state.inOrg.map((org) => 
                                 <option key = {org.id} value={org.id}>{org.name}</option>
                             )}
@@ -226,10 +225,11 @@ class Dashboard extends React.Component {
                         hasMore={false}
                         loader={<h4>Loading...</h4>}
                     > {this.state.activeMessages.map((message, index) => (
-                        <div>
+                        <div key = {message.id} style = {{margin:"1rem"}}>
                             <Center>
-                                <Box bgColor="#011627" color="#FDFFFC" width="40rem" height="auto" minHeight="5rem" borderRadius="2%" padding="1rem"> 
-                                    <Box>
+                                <Box bgColor="#011627" color="#FDFFFC" width="80vw" height="auto" minHeight="5rem" borderRadius="2%" padding="1rem"> 
+                                <SearchIcon onClick = {this.deleteMessage(message.id)}/>
+                                    <Box marginBottom = "1rem">
                                         <Flex>
                                             <Text fontWeight="bold">{message.user}</Text>
                                             <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
