@@ -103,8 +103,8 @@ class Dashboard extends React.Component {
         await DataStore.save(
             new Message({
                 "message": this.state.message,
-                "subject": "TODO: Not yet implemented",
-                "organization": "TODO: Not yet implemented",
+                "subject": this.state.targetSubject,
+                "organization": this.state.targetOrg,
                 "user": this.state.message,
                 "time": (new Date()).toString()
             })
