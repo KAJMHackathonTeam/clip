@@ -4,6 +4,7 @@ from googlesearch import search
 
 
 
+
 templateString = "https://www.khanacademy.org/search?referer=%2F&page_search_query={}"
 
 def getResult(question):
