@@ -161,6 +161,7 @@ class Dashboard extends React.Component {
                             </Box>
                         )}
                     </Center>
+ 
                 </div>
             </div>
         );
