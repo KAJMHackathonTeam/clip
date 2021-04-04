@@ -88,9 +88,13 @@ class Dashboard extends React.Component {
     {
         if(message.id == reply.messageID)
             return (<div key = {reply.id}>
-                        <Flex padding = "1rem">
-                            <Text marginLeft=".5rem"><strong>{reply.user}</strong>:   {reply.response}</Text>
+                    <Box padding = "1rem">
+                        <Flex >
+                            <Text marginLeft="1rem"><strong>{reply.user}:</strong></Text>
+                            <Text marginLeft=".5rem" fontWeight="light">{reply.time}</Text>
                         </Flex>
+                        <Text fontWeight = "light" marginLeft="2rem">{reply.response}</Text>
+                    </Box>
                    </div>)
         return;
     }
@@ -231,7 +235,7 @@ class Dashboard extends React.Component {
                                 <SearchIcon onClick = {this.deleteMessage(message.id)}/>
                                     <Box marginBottom = "1rem">
                                         <Flex>
-                                            <Text fontWeight="bold">{message.user}</Text>
+                                            <Text fontWeight="bold">{message.user}:</Text>
                                             <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
                                         </Flex>
                                         

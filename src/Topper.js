@@ -65,7 +65,7 @@ const NavBtnLink = styled(Link)`
     render(){
         return(
             <Navbar style = {{backgroundColor: "#000000", boxShadow:'0vh 0.2vh'}}  expand="lg">
-              <Navbar.Brand style = {{marginLeft:'10px'}}><Image src={logo} alt="Clip! logo" height="auto" width="100rem"></Image> </Navbar.Brand>
+              <Navbar.Brand style = {{marginLeft:'10px'}}><a href = "/" ><Image src={logo} alt="Clip! logo" height="auto" width="100rem"></Image></a> </Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" style = {{backgroundColor: "white"}}/>
               <Navbar.Collapse id="basic-navbar-nav" >
                 <Nav className="mr-auto" >
