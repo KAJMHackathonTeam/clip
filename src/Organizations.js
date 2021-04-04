@@ -76,6 +76,7 @@ class Organizations extends React.Component {
         }
     }
     async handleSubmit(){
+        if (this.state.name !== "" && this.state.users !== []){
         try{
         if (this.state.exists === true){
             const organization = await DataStore.query(Organization, this.state.id);
@@ -103,6 +104,9 @@ class Organizations extends React.Component {
         }
         }catch{
             alert("Error in creation")
+        }
+        }else{
+            alert("Please fill out all fields")
         }
     }
     render(){
