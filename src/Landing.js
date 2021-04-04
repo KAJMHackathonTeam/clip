@@ -4,6 +4,7 @@ import { Heading, Link, Image, Flex, Center, Box, IconButton, Text, Button, Cont
 import banner from "./assets/profile.png"
 import {DASHBOARD} from './App.js'
 import Topper from './Topper.js';
+import Typist from "react-typist";
 
 function Landing() {
     return (
@@ -26,7 +27,7 @@ function Landing() {
             <Image src={banner} alt="Clip! logo" height="auto" width="40rem"></Image> 
           </Box>
           <Box>
-            <Text fontSize="5xl">Bringing <strong>community</strong> back into <strong>online learning.</strong></Text>
+            <Text fontSize="5xl">Bringing <strong><Typist><Typist.Delay ms={500}/>community<Typist.Backspace count={9} delay={700} /><Typist.Delay ms={500}/>collaboration<Typist.Backspace count={13} delay={700} /><Typist.Delay ms={500}/>fun</Typist></strong> back into <strong>online learning.</strong></Text>
             <Center>
               <a href = {DASHBOARD}><Button bgColor="#2ec4b6" marginTop="2rem">Get Started</Button></a>
             </Center>

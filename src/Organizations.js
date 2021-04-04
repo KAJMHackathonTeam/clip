@@ -1,8 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Topper from './Topper.js'
-import { Accordion, Nav, Navbar, NavDropdown, Image, Jumbotron, ListGroup, Container, Col, Row, Carousel, Card, Button, Form, CardColumns } from 'react-bootstrap';
-import { Text } from '@chakra-ui/react';
+import { Accordion, Nav, Navbar, NavDropdown, Image, Jumbotron, ListGroup, Container, Col, Row, Carousel, Card, Form, CardColumns } from 'react-bootstrap';
+import { Text, Flex, Button } from '@chakra-ui/react';
 import Amplify, {Auth} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
 import { DataStore } from '@aws-amplify/datastore';
@@ -122,7 +122,11 @@ class Organizations extends React.Component {
                         </Form.Group>
                         <Form.Group controlId="formUsers">
                             <Form.Label>Users</Form.Label><br/>
-                            <div style = {{display:'flex'}}><Form.Control type = 'text' onChange = {this.onUserChange} value = {this.state.user} /><Button variant = 'secondary' style = {{marginLeft:'30px'}} onClick = {this.onUserSubmit}>Enter User</Button></div><br/>
+                            <Flex style = {{display:'flex'}}>
+                                <Form.Control type = 'text' onChange = {this.onUserChange} value = {this.state.user} />
+                                <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.onUserSubmit}>Enter User</Button>
+                            </Flex>
+                                <br/>
                             <Form.Label>Current Users</Form.Label>
                             {this.state.users.map(user => {
                                 return(
@@ -130,7 +134,7 @@ class Organizations extends React.Component {
                                 )
                             })}<br/>
                         </Form.Group><br/>
-                        <Button onClick = {this.handleSubmit}>Submit</Button>
+                        <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.handleSubmit}>Submit</Button>
                     </Form> 
                 </Jumbotron>
             </>

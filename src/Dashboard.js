@@ -91,7 +91,7 @@ class Dashboard extends React.Component {
                     <Box padding = "1rem">
                         <Flex >
                             <Text marginLeft="1rem"><strong>{reply.user}:</strong></Text>
-                            <Text marginLeft=".5rem" fontWeight="light">{reply.time}</Text>
+                            <Text marginLeft=".5rem" fontWeight="hairline">{reply.time}</Text>
                         </Flex>
                         <Text fontWeight = "light" marginLeft="2rem">{reply.response}</Text>
                     </Box>
@@ -217,7 +217,7 @@ class Dashboard extends React.Component {
                                 <option key = {org.id} value={org.id}>{org.name}</option>
                             )}
                         </Select>
-                        <Button bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleMessageSubmit}>Submit</Button>
+                        <Button bgColor="#2EC4B6" color="#FDFFFC" width="10rem" onClick={this.handleMessageSubmit}>Submit</Button>
                     </Center>
                 </Jumbotron>
 
@@ -243,10 +243,11 @@ class Dashboard extends React.Component {
                                         
                                         <Text mt=".5rem">{message.message}</Text>
                                     </Box>
-                                    
-                                    {this.state.responses.map((resp) =>
-                                        this.renderReply(message, resp)
-                                    )}
+                                        {this.state.responses.map((resp) =>
+                                            <Box border="1px" mb="2rem" borderColor="white">
+                                                { this.renderReply(message, resp) }
+                                            </Box>
+                                        )}
 
                                     <Box>
                                         <Flex>
