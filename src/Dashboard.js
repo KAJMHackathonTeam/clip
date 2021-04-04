@@ -90,7 +90,7 @@ class Dashboard extends React.Component {
                 "message": this.state.message,
                 "subject": "TODO: Not yet implemented",
                 "organization": "TODO: Not yet implemented",
-                "user": "TODO: Not yet implemented",
+                "user": this.state.message,
                 "time": (new Date()).toString()
             })
         );
