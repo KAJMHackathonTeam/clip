@@ -145,13 +145,8 @@ class Dashboard extends React.Component {
                 "subject": this.state.targetSubject,
                 "organization": this.state.targetOrg,
                 "user": this.state.username,
-<<<<<<< HEAD
                 "time": (new Date()).toString()
-=======
-                "time": time
->>>>>>> 21938029c5ac25d7a93ea0835584587e9e2ccc70
-            })
-        );
+            }));
         
         const models = await DataStore.query(Message);
         var searchID;
