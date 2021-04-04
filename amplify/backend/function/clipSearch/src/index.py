@@ -7,7 +7,7 @@ from googlesearch import search
 templateString = "https://www.khanacademy.org/search?referer=%2F&page_search_query={}"
 
 def getResult(question):
-    app_id = '7VELAH-V9EG8GKT3Q'
+    app_id = 'GEUQQW-H3AXJRHRK4'
     if 'googleQ' in question:
         return googleSearch(question)
     if 'learn' in question:
@@ -19,8 +19,7 @@ def getResult(question):
         results = next(res.results)
         answer = results.text
     except Exception as e:
-        print(e)
-        return "I can't answer that one. Go check out the community forum!"
+        return googleSearch(question)
     return answer
 
 def googleSearch(query):
@@ -36,18 +35,14 @@ def createKhanLink(query):
     return link
 
 def handler(event, context):
-  #a = getResult(event["query"])
-  print(event)
-  event2 = json.loads(event)
-  a = event2["query"]
-  b = getResult(a)
+  event2 = json.dumps(event)[11:-2]
+  a = getResult(event2)
   return {
-        "statusCode": 200,
-        "headers": {
-            "Content-Type": "application/json",
-            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": True,
-        },
-        "body": b
-    }
+      "statusCode":200,
+      "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Request-Method": "ANY"
+      },
+      "body": a
+  }

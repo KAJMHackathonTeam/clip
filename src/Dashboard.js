@@ -97,9 +97,6 @@ class Dashboard extends React.Component {
     async handleSearchSubmit() {
         if (this.state.searchQuery !== ""){
             var result = searchJSONArray(this.state.messages, 'message', this.state.searchQuery)
-            console.log('message: ', this.state.searchQuery);
-            console.log('all: ', this.state.messages);
-            console.log('search: ', result);
             this.setState({activeMessages: result})
         }
         else{
@@ -138,7 +135,7 @@ class Dashboard extends React.Component {
                 console.log(response)
                 DataStore.save(
                     new Response({
-                        "response": response,
+                        "response": response["data"].body,
                         "messageID": searchID,
                         "user": "Clip! Aid",
                         "time": time
@@ -155,7 +152,6 @@ class Dashboard extends React.Component {
         }
         
     }
-
     render(){
         return(
             <div>
