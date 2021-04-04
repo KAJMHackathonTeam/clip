@@ -29,6 +29,7 @@ export declare class Organization {
   readonly id: string;
   readonly name: string;
   readonly users?: string[];
+  readonly creator: string;
   constructor(init: ModelInit<Organization>);
   static copyOf(source: Organization, mutator: (draft: MutableModel<Organization>) => MutableModel<Organization> | void): Organization;
 }

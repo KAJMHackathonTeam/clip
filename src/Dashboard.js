@@ -1,8 +1,11 @@
 import React from 'react';
 import Topper from './Topper';
 import { searchJSONArray } from './functions/searchJSON'
-import { Input, IconButton, Center, Button, Flex } from '@chakra-ui/react';
+import { Input, IconButton, Center, Button, Flex, Box, Text } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
+import Amplify,{ Auth} from 'aws-amplify'
+import { withAuthenticator } from '@aws-amplify/ui-react'
+
 import { DataStore } from '@aws-amplify/datastore';
 import { Response, Message, Organization, User } from './models';
 
@@ -13,12 +16,13 @@ class Dashboard extends React.Component {
         super(props)
         this.state = {
             message: '',
-            searchQuery: ''
+            searchQuery: '',
+            messages: []
         }
         
         this.handleSearchChange = this.handleSearchChange.bind(this)
         this.handleMessageChange = this.handleMessageChange.bind(this)
-
+        
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
         this.handleMessageSubmit = this.handleMessageSubmit.bind(this)
     }
@@ -31,6 +35,7 @@ class Dashboard extends React.Component {
        this.setState({message: event.target.value});
     }
 
+
     async handleSearchSubmit(event) {
         //fetch Messages
         const models = await DataStore.query(Message);
@@ -39,6 +44,7 @@ class Dashboard extends React.Component {
         console.log('message: ', this.state.searchQuery);
         console.log('all: ', models);
         console.log('search: ', result);
+        this.setState({messages: result})
     }
 
     async handleMessageSubmit(event) {
@@ -74,10 +80,23 @@ class Dashboard extends React.Component {
                     <Button bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleMessageSubmit}>Submit</Button>
                 </Center>
 
-                <MessageBoard/>
+                <div>
+                    <Center>
+                        {this.state.messages.map((message) => 
+                            <Box bgColor="#011627" color="#FDFFFC" width="40rem" height="auto" minHeight="5rem" borderRadius="2%" padding="1rem"> 
+                                <Flex>
+                                    <Text fontWeight="bold">{message.user}</Text>
+                                    <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
+                                </Flex>
+
+                                <Text mt=".5rem">{message.message}</Text>
+                            </Box>
+                        )}
+                    </Center>
+                </div>
             </div>
         );
     }
 };
 
-export default Dashboard;
+export default withAuthenticator(Dashboard);
