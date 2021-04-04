@@ -103,10 +103,10 @@ class Dashboard extends React.Component {
     {
         if(message.id == reply.messageID)
             return (<div key = {reply.id}>
-                    <Box padding = "1rem">
+                    <Box border="1px" mb="2rem" borderColor="white" padding = "1rem">
                         <Flex >
                             <Text marginLeft="1rem"><strong>{reply.user}:</strong></Text>
-                            <Text marginLeft=".5rem" fontWeight="light">{reply.time}</Text>
+                            <Text marginLeft=".5rem" fontWeight="hairline">{reply.time}</Text>
                         </Flex>
                         <Text fontWeight = "light" marginLeft="2rem">{reply.response}</Text>
                     </Box>
@@ -258,10 +258,11 @@ class Dashboard extends React.Component {
                                         
                                         <Text mt=".5rem">{message.message}</Text>
                                     </Box>
-                                    
-                                    {this.state.responses.map((resp) =>
-                                        this.renderReply(message, resp)
-                                    )}
+                                        {this.state.responses.map((resp) =>
+                                            <Box >
+                                                { this.renderReply(message, resp) }
+                                            </Box>
+                                        )}
 
                                     <Box>
                                         <Flex>
