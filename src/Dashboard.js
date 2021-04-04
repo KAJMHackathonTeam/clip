@@ -7,7 +7,7 @@ import { Jumbotron } from 'react-bootstrap';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Amplify, Auth} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
-
+import MessageBoard from './MessageBoard';
 import { DataStore } from '@aws-amplify/datastore';
 import { Response, Message, Organization, User } from './models';
 
@@ -28,7 +28,7 @@ class Dashboard extends React.Component {
         this.handleSearchChange = this.handleSearchChange.bind(this)
         this.handleMessageChange = this.handleMessageChange.bind(this)
         this.handleOrganizationSelectChange = this.handleOrganizationSelectChange.bind(this)
-        this.handleSubjectSelectChange = this.handleSubjectSelectChange.bind(this)
+        this.handleSubjectChange = this.handleSubjectChange.bind(this)
 
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
         this.handleMessageSubmit = this.handleMessageSubmit.bind(this)
@@ -75,8 +75,12 @@ class Dashboard extends React.Component {
         this.setState({targetOrg: event.target.value})
     }
 
-    handleSubjectSelectChange(event) {
+    handleSubjectChange(event) {
         this.setState({targetSubject: event.target.value})
+    }
+    
+    handleReplyChange(event) {
+
     }
 
     async handleSearchSubmit() {
@@ -124,35 +128,39 @@ class Dashboard extends React.Component {
                     {/* Message Submit */}
                     <Center m="auto" w="50%" my="2rem">
                         <Input bgColor="white" placeholder="Enter Message" onChange={this.handleMessageChange}/>
+                        <Input bgColor="white" placeholder="Subject" onChange={this.handleSubjectChange} width="15rem"/>
                         <Select bgColor="white" name="subject-select" id="subject-select" width="15rem" placeholder="Organization" onChange={this.handleSubjectSelectChange}>
                             {organizations.map((org) => 
-                                <option value={org}>org</option>
-                            )}
-                        </Select>
-                        <Select bgColor="white" name="organization-select" id="organization-select" width="15rem" placeholder="Subject" onChange={this.handleOrganizationSelectChange}>
-                            {subjects.map((org) => 
                                 <option value={org}>org</option>
                             )}
                         </Select>
                         <Button bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleMessageSubmit}>Submit</Button>
                     </Center>
                 </Jumbotron>
-
+                                
                 <div>
                     <Center>
                         {this.state.activeMessages.map((message) => 
                             <Box bgColor="#011627" color="#FDFFFC" width="40rem" height="auto" minHeight="5rem" borderRadius="2%" padding="1rem"> 
-                                <Flex>
-                                    <Text fontWeight="bold">{message.user}</Text>
-                                    <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
-                                </Flex>
+                                <Box>
+                                    <Flex>
+                                        <Text fontWeight="bold">{message.user}</Text>
+                                        <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
+                                    </Flex>
+                                    
+                                    <Text mt=".5rem">{message.message}</Text>
+                                </Box>
+                                
 
-                                <Text mt=".5rem">{message.message}</Text>
-                                <Input mt=".5rem" bgColor="white" placeholder="Reply"/>
+                                <Box>
+                                    <Flex>
+                                        <Input placeholder="Reply" onChange={this.handleReplyChange}></Input>
+                                        <Button color="black" bgColor="#2EC4B6">Submit</Button>
+                                    </Flex> 
+                                </Box>
                             </Box>
                         )}
                     </Center>
-
                 </div>
             </div>
         );
