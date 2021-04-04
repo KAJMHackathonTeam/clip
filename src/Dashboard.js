@@ -233,18 +233,12 @@ class Dashboard extends React.Component {
                             <Center>
                                 <Box bgColor="#011627" color="#FDFFFC" width="80vw" height="auto" minHeight="5rem" borderRadius="10px" padding="1rem"> 
                                     <Box marginBottom = "1rem">
-<<<<<<< HEAD
                                         <Flex justify="space-between">
                                             <Flex>
                                                 <Text fontWeight="bold">{message.user}</Text>
                                                 <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
                                             </Flex>
                                             <IconButton bgColor="red" color="white" onClick={this.deleteMessage(message.id)} icon={<CloseIcon/>}/>
-=======
-                                        <Flex>
-                                            <Text fontWeight="bold">{message.user}:</Text>
-                                            <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
->>>>>>> 6afe6adadaafeabebf9c230906ec3d232ec02ae8
                                         </Flex>
                                         
                                         <Text mt=".5rem">{message.message}</Text>
