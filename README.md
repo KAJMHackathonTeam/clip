@@ -1,3 +1,8 @@
-npm i @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^4
+Clip! - Bringing Community back into Learning
 
-npm install bootstrap
+**Steps:**
+Install all dependencies with npm install
+npm start from root directory
+
+**Project Link**
+https://dev.d1j5mewluzppiw.amplifyapp.com/
