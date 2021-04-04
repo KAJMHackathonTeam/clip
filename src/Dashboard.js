@@ -27,6 +27,7 @@ class Dashboard extends React.Component {
             activeMessages: [],
             targetOrg: '',
             targetSubject: '',
+            responses: [],
         }
         
         this.handleSearchChange = this.handleSearchChange.bind(this)
@@ -54,14 +55,14 @@ class Dashboard extends React.Component {
 
         const messageAll = await DataStore.query(Message);
         const organizations = await DataStore.query(Organization);
-        console.log(messageAll)
+        const responses = await DataStore.query(Response);
+
         let messages = [];
         let inOrg = [];
         let fullOrgs = []
         for (var i = 0; i < organizations.length; i ++){
             
             if (organizations[i].users.indexOf(username) !== -1){
-                console.log(organizations[i], "in")
                 inOrg.push(organizations[i].id)
                 fullOrgs.push(organizations[i])
             }
@@ -69,16 +70,29 @@ class Dashboard extends React.Component {
         this.setState({inOrg: fullOrgs})
 
         for (i = 0; i < messageAll.length; i++){
-            console.log(messageAll[i])
             if (inOrg.indexOf(messageAll[i].organization) !== -1){
                 messages.push(messageAll[i])
             }
         }
         this.setState({messages: messages})
         this.setState({activeMessages: messages})
-        console.log("messages: ",messages)
+        this.setState({responses: responses})
+
+        console.log(this.state.responses);
 
     }
+
+
+    renderReply(message, reply)
+    {
+        if(message.id == reply.messageID)
+            return (<Flex>
+                         <Text> {reply.response} </Text>
+
+                   </Flex>)
+        return;
+    }
+
     handleSearchChange(event) {
         this.setState({searchQuery: event.target.value})
     }
@@ -103,10 +117,7 @@ class Dashboard extends React.Component {
     }
 
     async handleReplySubmit(event) {
-        console.log("new reply: ", this.state.reply[event.target.id]);
-        console.log('message', this.state.messages);
-        console.log("button event: ",parseInt(event.target.id) ,this.state.messages[parseInt(event.target.id)]);
-        
+
         //message reference: this.state.messages[parseInt(event.target.id)]
         var messageRef = this.state.messages[parseInt(event.target.id)];
 
@@ -119,21 +130,18 @@ class Dashboard extends React.Component {
                 "time": (new Date()).toString()
             })
         );
-        
+        window.location.reload();
     }
 
     async handleSearchSubmit() {
         if (this.state.searchQuery !== ""){
             var result = searchJSONArray(this.state.messages, 'message', this.state.searchQuery)
-            console.log('message: ', this.state.searchQuery);
-            console.log('all: ', this.state.messages);
-            console.log('search: ', result);
+
             this.setState({activeMessages: result})
         }
         else{
             this.setState({activeMessages: this.state.messages})
         }
-
     }
 
     async handleMessageSubmit() {
@@ -180,7 +188,7 @@ class Dashboard extends React.Component {
         }else{
             alert("Please fill out all fields")
         }
-        
+        window.location.reload();
     }
 
     render(){
@@ -228,6 +236,10 @@ class Dashboard extends React.Component {
                                         <Text mt=".5rem">{message.message}</Text>
                                     </Box>
                                     
+                                    {this.state.responses.map((resp) =>
+                                        this.renderReply(message, resp)
+                                    )}
+
                                     <Box>
                                         <Flex>
                                             <Input placeholder="Reply" onChange={this.handleReplyChange} id={index} ></Input>
