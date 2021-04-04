@@ -88,9 +88,13 @@ class Dashboard extends React.Component {
     {
         if(message.id == reply.messageID)
             return (<div key = {reply.id}>
-                        <Flex padding = "1rem">
-                            <Text marginLeft=".5rem"><strong>{reply.user}</strong>:   {reply.response}</Text>
+                    <Box padding = "1rem">
+                        <Flex >
+                            <Text marginLeft="1rem"><strong>{reply.user}:</strong></Text>
+                            <Text marginLeft=".5rem" fontWeight="light">{reply.time}</Text>
                         </Flex>
+                        <Text fontWeight = "light" marginLeft="2rem">{reply.response}</Text>
+                    </Box>
                    </div>)
         return;
     }
@@ -229,12 +233,18 @@ class Dashboard extends React.Component {
                             <Center>
                                 <Box bgColor="#011627" color="#FDFFFC" width="80vw" height="auto" minHeight="5rem" borderRadius="10px" padding="1rem"> 
                                     <Box marginBottom = "1rem">
+<<<<<<< HEAD
                                         <Flex justify="space-between">
                                             <Flex>
                                                 <Text fontWeight="bold">{message.user}</Text>
                                                 <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
                                             </Flex>
                                             <IconButton bgColor="red" color="white" onClick={this.deleteMessage(message.id)} icon={<CloseIcon/>}/>
+=======
+                                        <Flex>
+                                            <Text fontWeight="bold">{message.user}:</Text>
+                                            <Text marginLeft=".5rem" fontWeight="light">{message.time}</Text>
+>>>>>>> 6afe6adadaafeabebf9c230906ec3d232ec02ae8
                                         </Flex>
                                         
                                         <Text mt=".5rem">{message.message}</Text>
