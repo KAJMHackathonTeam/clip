@@ -6,6 +6,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios'
 import { Jumbotron } from 'react-bootstrap';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
+import * as queries from './graphql/queries';
+import * as mutations from './graphql/mutations';
+import * as subscriptions from './graphql/subscriptions';
 import { Amplify, Auth} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
 import MessageBoard from './MessageBoard';
@@ -53,12 +56,21 @@ class Dashboard extends React.Component {
         }
 
 
-        const messageAll = await DataStore.query(Message);
-        const organizations = await DataStore.query(Organization);
-        const responses = await DataStore.query(Response);
+        let messageAll = await API.graphql({ query: queries.listMessages})
+        messageAll = messageAll.data.listMessages.items
+
+
+        let organizations = await API.graphql({ query: queries.listOrganizations})
+        organizations = organizations.data.listOrganizations.items
+
+
+        let responses = await API.graphql({ query: queries.listResponses})
+        responses = responses.data.listResponses.items
+
         let messages = [];
         let inOrg = [];
         let fullOrgs = []
+        console.log(organizations)
         for (var i = 0; i < organizations.length; i ++){
             
             if (organizations[i].users.indexOf(username) !== -1){
@@ -81,8 +93,11 @@ class Dashboard extends React.Component {
 
     async deleteMessage(id){
         //delete message and all responses associated
-        const modelToDelete = await DataStore.query(Message, id);
-        DataStore.delete(modelToDelete);
+        const modelToDelete = {
+            id: id
+        }
+
+        await API.graphql({query: mutations.deleteMessage, variables: {input: modelToDelete}})
 
         var toDelete = []
         for (var i = 0; i < this.state.responses.length; i ++){
@@ -91,9 +106,12 @@ class Dashboard extends React.Component {
             }
         }
         for (i = 0; i < toDelete.length; i ++){
-            DataStore.delete(toDelete[i])
+            await API.graphql({query: mutations.deleteMessage, variables: {input: toDelete[i]}})
         }
-        const testCheck = await DataStore.query(Response)
+        
+        
+        
+        let responses = await API.graphql({ query: queries.listResponses})
         .then(() => {
         window.location.reload()
         });
@@ -143,14 +161,13 @@ class Dashboard extends React.Component {
         var messageRef = this.state.messages[parseInt(event.target.id)];
 
 
-        await DataStore.save(
-            new Response({
+        let response = {
                 "response": this.state.reply[event.target.id],
                 "messageID": messageRef.id,
                 "user": this.state.username,
                 "time": (new Date()).toString()
-            })
-        );
+        }
+        await API.graphql({query: mutations.createResponse, variables: {input: response}})
         window.location.reload();
     }
 
@@ -168,16 +185,19 @@ class Dashboard extends React.Component {
         if (this.state.message !== "" && this.state.targetSubject !== "" && this.state.targetOrg !== ""){
         this.setState({clicked: true})
         var time = (new Date()).toString()
-        await DataStore.save(
-            new Message({
+        let message = {
                 "message": this.state.message,
                 "subject": this.state.targetSubject,
                 "organization": this.state.targetOrg,
                 "user": this.state.username,
                 "time": (new Date()).toString()
-            }));
+            }
         
-        const models = await DataStore.query(Message);
+        await API.graphql({query: mutations.createMessage, variables: {input: message}})
+        
+        let models = await API.graphql({ query: queries.listMessages})
+        models = models.data.listMessages.items
+
         var searchID;
         for (var i = 0; i < models.length; i++){
             if (models[i].message === this.state.message && models[i].user === this.state.username && models[i].time === time){
@@ -190,14 +210,14 @@ class Dashboard extends React.Component {
         axios
             .post(api, data)
             .then((response) => {
-                DataStore.save(
-                    new Response({
+                response = {
                         "response": response["data"].body,
                         "messageID": searchID,
                         "user": "Clip! Aid",
                         "time": time
-                    })
-                ).then(() => {
+                }
+                await API.graphql({query: mutations.createResponse, variables: {input: response}})
+                .then(() => {
                     alert('Question Asked')
                     window.location.reload()
                 })
