@@ -5,7 +5,7 @@ import { sortJSONArray } from './functions/sortJSON'
 import { Input, IconButton, Center, Button, Flex, Box, Select, Text } from '@chakra-ui/react';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios'
-import { Jumbotron } from 'react-bootstrap';
+import { Jumbotron, Popover, OverlayTrigger } from 'react-bootstrap';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 import * as queries from './graphql/queries';
 import * as mutations from './graphql/mutations';
@@ -253,6 +253,16 @@ class Dashboard extends React.Component {
 
 
     renderDashboardInput() {
+        const popover = (
+            <Popover>
+                <Popover.Title as="h3">Message Commands</Popover.Title>
+                <Popover.Content>
+                    <strong>summarizeQ: </strong>Summarizes main ideas from entered text<br/>
+                    <strong>learnQ: </strong>Gets Khan Academy search link<br/>
+                    <strong>googleQ: </strong>Returns list of relevant Google links<br/>
+                </Popover.Content>
+            </Popover>
+        );
         return (
             <Jumbotron style = {{margin: '50px', color: 'white', borderRadius: "10px", backgroundColor: "#02223C"}}> 
                 <Text fontSize="5xl">Dashboard</Text><br/>
@@ -265,7 +275,9 @@ class Dashboard extends React.Component {
 
                 {/* Message Submission*/}
                 <Center m="auto" w="80%" my="2rem">
-                    <Input bgColor="#082D4F" placeholder="Enter Message" onChange={this.handleMessageChange} className={styles.TextBox} borderRadius="10px"/>
+                    <OverlayTrigger trigger="hover" placement="top" overlay={popover}>
+                        <Input bgColor="#082D4F" placeholder="Enter Message" onChange={this.handleMessageChange} className={styles.TextBox} borderRadius="10px"/>
+                    </OverlayTrigger>
                     <Input mx="1rem" bgColor="#082D4F" placeholder="Subject" onChange={this.handleSubjectChange} width="15rem" borderRadius="10px" className={styles.TextBox} borderRadius="10px"/>
                     <Select bgColor="#082D4F" name="organization-select" id="subject-select" width="30rem" borderRadius="10px" placeholder="Organization" onChange={this.handleOrganizationSelectChange} className={styles.TextBox}  color="white">
                         {this.state.all_organizations.map((org) => 
