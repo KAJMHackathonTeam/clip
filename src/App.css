@@ -49,4 +49,11 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
 }
 
+.SelectOption {
+  color: black;
+}
+
+.SelectOption ::placeholder {
+  color: black;
+}
 
