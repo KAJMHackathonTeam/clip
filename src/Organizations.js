@@ -24,7 +24,6 @@ class Organizations extends React.Component {
         }
         this.onNameChange = this.onNameChange.bind(this)
         this.onUserChange = this.onUserChange.bind(this)
-        this.deleteUser = this.deleteUser.bind(this)
         this.onUserSubmit = this.onUserSubmit.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
@@ -94,18 +93,18 @@ class Organizations extends React.Component {
             users.push(this.state.users[i])
         }
         if(this.state.user !== ""){
-            users.push(this.state.user)
+            if (this.state.user.indexOf("delete") !== -1){
+                var split = this.state.user.split(" ")
+                var index = this.state.users.indexOf(split[1])
+                users.splice(index)
+            }else{
+                users.push(this.state.user)
+            }
             let uniqueUsers = [...new Set (users)]
             users = uniqueUsers
             this.setState({users: users})
             this.setState({user: ""})
         }
-    }
-    deleteUser(user){
-        let users = this.state.users
-        let index = users.indexOf(user)
-        users.splice(index)
-        this.setState({users: users})
     }
     async handleSubmit(){
         if (this.state.name !== "" && this.state.users !== []){
@@ -117,7 +116,6 @@ class Organizations extends React.Component {
                 name: this.state.name,
                 users: this.state.users
             }
-            console.log(organization)
             await API.graphql({query: mutations.updateOrganization, variables: {input: organization}})
             .then(() => {
                 alert("Organization Updated")
@@ -164,17 +162,17 @@ class Organizations extends React.Component {
                             <Form.Label>Current Users</Form.Label>
                             {this.state.users.map(user => {
                                 return(
-                                    <div onClick = {this.deleteUser(user)} style = {{marginLeft: '1rem'}} key = {user}><strong>{user}</strong></div>
+                                    <div  style = {{marginLeft: '1rem'}} key = {user}><strong>{user}</strong></div>
                                 )
                             })}<br/>
                         </Form.Group><br/>
                         <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.handleSubmit}>Submit</Button>
                     </Form> 
                 </Jumbotron>
-                <CardColumns style = {{columns: 'auto'}}>
+                <CardColumns >
                 {this.state.inOrg.map((org) => (
                      <div key = {org.id} >
-                     <Card  style={{ width: '18rem', margin: '5vw' }} > 
+                     <Card  style={{ maxWidth: '18rem', margin: '5vw' }} > 
                          <Card.Body>
                              <Card.Title>{org.name}</Card.Title>
                                  <strong>Users:</strong>
