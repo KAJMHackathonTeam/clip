@@ -25,7 +25,7 @@ function searchJSONArray(arr, searchKeys, searchValue="")
         {
             var data = item[searchKeys[i]];
 
-            if (data != undefined)
+            if (data !== undefined)
             {
                 data = data.toLowerCase();
                 data = data.replace(/\s/g, '');

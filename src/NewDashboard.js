@@ -187,10 +187,10 @@ class Dashboard extends React.Component {
             this.setState({clicked: true})
             var time = (new Date()).toString()
             let message = {
-                "message": this.state.message,
-                "subject": this.state.targetSubject,
-                "organization": this.state.targetOrg,
-                "user": this.state.username,
+                "message": this.state.usr_message,
+                "subject": this.state.usr_targetSubject,
+                "organization": this.state.usr_targetOrg,
+                "user": this.state.usr_username,
                 "time": time
             }
         
@@ -272,23 +272,31 @@ class Dashboard extends React.Component {
 
 
     //########################################## TABLE INPUT HANDLERS + RENDER
-    async deleteMessage(id){
+    async deleteMessage(message){
         //delete message and all responses associated
+        console.log(message._version)
         const modelToDelete = {
-            id: id
+            id: message.id,
+            _version: message._version
         }
-
+        console.log(modelToDelete)
         await API.graphql({query: mutations.deleteMessage, variables: {input: modelToDelete}})
 
-        
+        console.log("complete")
         var toDelete = []
         for (var i = 0; i < this.state.all_responses.length; i ++){
-            if (this.state.all_responses[i].messageID === id){
+            if (this.state.all_responses[i].messageID === message.id){
                 toDelete.push(this.state.all_responses[i])
             }
         }
+        console.log(toDelete)
         for (i = 0; i < toDelete.length; i ++){
-            await API.graphql({query: mutations.deleteMessage, variables: {input: toDelete[i]}})
+            let newDelete = {
+                id: toDelete[i].id,
+                _version: toDelete[i]._version
+            }
+            await API.graphql({query: mutations.deleteResponse, variables: {input: newDelete}})
+            console.log("complete")
         }
         let responses = await API.graphql({ query: queries.listResponses})
         .then(() => {
@@ -312,13 +320,12 @@ class Dashboard extends React.Component {
 
 
         let response = {
-            "response": this.state.reply[event.target.id],
+            "response": this.state.usr_replies[event.target.id],
             "messageID": messageRef.id,
-            "user": this.state.username,
+            "user": this.state.usr_username,
             "time": (new Date()).toString()
     }
     await API.graphql({query: mutations.createResponse, variables: {input: response}})
-        
         this.updateLocalData();
         this.handleSearchSubmit();
     }
@@ -369,14 +376,14 @@ class Dashboard extends React.Component {
                                             <Text marginLeft=".5rem" fontWeight="light">{message.time} </Text>
                                             <Text marginLeft=".5rem" fontWeight="bold">{"Subject: " + message.subject}</Text>
                                             </Flex>
-                                            <IconButton bgColor="#2EC4B6" color="white" onClick={() => this.deleteMessage(message.id)} icon={<CloseIcon/>}/>
+                                            <IconButton bgColor="#2EC4B6" color="white" onClick={() => this.deleteMessage(message)} icon={<CloseIcon/>}/>
                                             </Flex>
 
                                             <Text mt=".5rem">{message.message}</Text>
                                         </Box>
 
                                         {this.state.all_responses.map((resp) =>
-                                            <Box >
+                                            <Box key = {resp.id}>
                                                 { this.renderReply(message, resp) }
                                             </Box>
                                         )}

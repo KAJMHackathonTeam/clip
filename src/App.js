@@ -8,16 +8,12 @@ import {
 import Landing from './Landing.js'
 import Dashboard from './NewDashboard.js'
 import Organizations from './Organizations.js'
-import { DataStore } from '@aws-amplify/datastore';
 // eslint-disable-next-line
 
 export var LANDING = '/'
 export var DASHBOARD = '/dashboard'
 export var ORGANIZATIONS = '/organizations'
 class App extends React.Component {
-  async componentDidMount(){
-    await DataStore.start();
-  }
   render(){
     return (
       <Router>

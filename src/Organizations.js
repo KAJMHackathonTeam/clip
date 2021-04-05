@@ -19,10 +19,12 @@ class Organizations extends React.Component {
             user: '',
             users: [],
             id: "",
+            organizations: [],
             exists: false
         }
         this.onNameChange = this.onNameChange.bind(this)
         this.onUserChange = this.onUserChange.bind(this)
+        this.deleteUser = this.deleteUser.bind(this)
         this.onUserSubmit = this.onUserSubmit.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
@@ -38,7 +40,7 @@ class Organizations extends React.Component {
         
         let organizations = await API.graphql({ query: queries.listOrganizations})
         organizations = organizations.data.listOrganizations.items
-        console.log(organizations)
+        this.setState({organizations: organizations})
         let organization;
         let exists = false;
         for(var i = 0; i < organizations.length; i ++){
@@ -47,7 +49,7 @@ class Organizations extends React.Component {
                 exists = true
             }
         }
-
+        if(exists === true){        
         let users = []
         for (var i = 0; i < organization.users.length; i ++){
             users.push(organization.users[i])
@@ -55,7 +57,6 @@ class Organizations extends React.Component {
         let uniqueUsers = [...new Set (users)]
         users = uniqueUsers
         console.log(users)
-        if(exists === true){
             this.setState({users: users})
             this.setState({name: organization.name})
             this.setState({id: organization.id})
@@ -99,6 +100,12 @@ class Organizations extends React.Component {
             this.setState({users: users})
             this.setState({user: ""})
         }
+    }
+    deleteUser(user){
+        let users = this.state.users
+        let index = users.indexOf(user)
+        users.splice(index)
+        this.setState({users: users})
     }
     async handleSubmit(){
         if (this.state.name !== "" && this.state.users !== []){
@@ -157,7 +164,7 @@ class Organizations extends React.Component {
                             <Form.Label>Current Users</Form.Label>
                             {this.state.users.map(user => {
                                 return(
-                                    <div style = {{marginLeft: '1rem'}} key = {user}><p><strong>{user}</strong></p></div>
+                                    <div onClick = {this.deleteUser(user)} style = {{marginLeft: '1rem'}} key = {user}><strong>{user}</strong></div>
                                 )
                             })}<br/>
                         </Form.Group><br/>
@@ -170,12 +177,10 @@ class Organizations extends React.Component {
                      <Card  style={{ width: '18rem', margin: '5vw' }} > 
                          <Card.Body>
                              <Card.Title>{org.name}</Card.Title>
-                             <Card.Text>
                                  <strong>Users:</strong>
                                  {org.users.map((user) => (
-                                     <p style = {{marginLeft: '1rem'}}  key = {user}>{user}</p>
+                                     <div style = {{marginLeft: '1rem'}}  key = {user}>{user}</div>
                                  ))}
-                             </Card.Text>
                          </Card.Body>                         
                      </Card>
                      </div>
