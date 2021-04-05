@@ -81,7 +81,6 @@ class Dashboard extends React.Component {
             let messagesAll = await API.graphql({ query: queries.listMessages})
             messagesAll = messagesAll.data.listMessages.items
     
-    
             let organizationsAll = await API.graphql({ query: queries.listOrganizations})
             organizationsAll = organizationsAll.data.listOrganizations.items
     
@@ -89,11 +88,27 @@ class Dashboard extends React.Component {
             responsesAll = responsesAll.data.listResponses.items
 
 
+            let messages = []
+            for (var i = 0; i < messagesAll.length; i++){
+                if (messagesAll[i]._deleted !== true || messagesAll[i]._deleted === null){
+                    messages.push(messagesAll[i])
+                }
+            }
+            messagesAll = messages
+
+            let responses = []
+            for (var i = 0; i < responsesAll.length; i++){
+                if (responsesAll[i]._deleted !== true || responsesAll[i]._deleted === null){
+                    responses.push(responsesAll[i])
+                }
+            }
+            responsesAll = responses
+
             //determine which organizations is the user subscribed to.
             let organizationsSubscribed = [];
             let orgIdSet = new Set();
             
-            for (let i = 0; i < organizationsAll.length; i++) {
+            for ( i = 0; i < organizationsAll.length; i++) {
                 if (organizationsAll[i].users.indexOf(this.state.usr_username) !== -1)
                 {
                     organizationsSubscribed.push(organizationsAll[i]);
@@ -107,6 +122,7 @@ class Dashboard extends React.Component {
             let messagesSubscribed = [];
             let messageIdSet = new Set();
             let responsesSubscribed = [];
+
 
             for (let i = 0; i < messagesAll.length; i++) {
                 if (orgIdSet.has(messagesAll[i].organization))
@@ -140,7 +156,7 @@ class Dashboard extends React.Component {
             this.setState({all_messagesAndResponsesMapped : messagesAndResponsesMapped});
 
 
-            console.log("messageAll: ", messagesAll);
+            console.log("messagesAll: ", messagesAll);
             console.log("organizationsAll: ",organizationsAll);
             console.log("responsesAll: ", responsesAll);
 
@@ -185,7 +201,7 @@ class Dashboard extends React.Component {
     }
     async handleMessageSubmit(event) {
         if (this.state.usr_message !== "" && this.state.usr_targetSubject !== "" && this.state.usr_targetOrg !== ""){
-            this.setState({clicked: true})
+            this.setState({state_clicked: true})
             var time = (new Date()).toString()
             let message = {
                 "message": this.state.usr_message,
@@ -275,32 +291,27 @@ class Dashboard extends React.Component {
     //########################################## TABLE INPUT HANDLERS + RENDER
     async deleteMessage(message){
         //delete message and all responses associated
-        console.log(message._version)
         const modelToDelete = {
             id: message.id,
             _version: message._version
         }
-        console.log(modelToDelete)
         await API.graphql({query: mutations.deleteMessage, variables: {input: modelToDelete}})
 
-        console.log("complete")
         var toDelete = []
         for (var i = 0; i < this.state.all_responses.length; i ++){
             if (this.state.all_responses[i].messageID === message.id){
                 toDelete.push(this.state.all_responses[i])
             }
         }
-        console.log(toDelete)
         for (i = 0; i < toDelete.length; i ++){
             let newDelete = {
                 id: toDelete[i].id,
                 _version: toDelete[i]._version
             }
             await API.graphql({query: mutations.deleteResponse, variables: {input: newDelete}})
-            console.log("complete")
         }
         let responses = await API.graphql({ query: queries.listResponses})
-        .then(() => {
+        .then((e) => {
             this.updateLocalData();
             this.handleSearchSubmit();
         });
@@ -312,7 +323,6 @@ class Dashboard extends React.Component {
             [event.target.id] : event.target.value
         } })
 
-        console.log(this.state.usr_replies)
     }
 
     async handleReplySubmit(event) {
