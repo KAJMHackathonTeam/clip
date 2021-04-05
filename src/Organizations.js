@@ -8,6 +8,7 @@ import * as mutations from './graphql/mutations';
 import * as subscriptions from './graphql/subscriptions';
 import Amplify, {API, graphqlOperation, Auth} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
+import styles from './Organizations.module.css';
 
 class Organizations extends React.Component {
     constructor(props){
@@ -144,18 +145,19 @@ class Organizations extends React.Component {
     render(){
         return(
             <>
-                <Topper/>
-                <Jumbotron style = {{margin: '50px'}}>
+            <div className={styles.main}>
+            <Topper/>
+                <Jumbotron style = {{margin: '50px', backgroundColor: "#02223C", color:"white"}}>
                     <Text fontSize="5xl">Manage Organizations</Text><br/>
                    <Form id = 'CreateOrganizations'>
                         <Form.Group controlId="formName">
                             <Form.Label>Organization Name</Form.Label><br/>
-                            <Form.Control type = 'text' onChange = {this.onNameChange} value = {this.state.name} />
+                            <Form.Control type = 'text' onChange = {this.onNameChange} value = {this.state.name} className={styles.TextBox}></Form.Control>
                         </Form.Group>
                         <Form.Group controlId="formUsers">
                             <Form.Label>Users</Form.Label><br/>
                             <Flex style = {{display:'flex'}}>
-                                <Form.Control type = 'text' onChange = {this.onUserChange} value = {this.state.user} />
+                                <Form.Control type = 'text' onChange = {this.onUserChange} value = {this.state.user} className={styles.TextBox} />
                                 <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.onUserSubmit}>Enter User</Button>
                             </Flex>
                                 <br/>
@@ -172,7 +174,11 @@ class Organizations extends React.Component {
                 <CardColumns >
                 {this.state.inOrg.map((org) => (
                      <div key = {org.id} >
+<<<<<<< HEAD
                      <Card  style={{ maxWidth: '18rem', margin: '5vw' }} > 
+=======
+                     <Card  style={{ width: '18rem', margin: '5vw',  backgroundColor: "#02223C", color: 'white' }} > 
+>>>>>>> 4d0a0b0237ba561bbec0e50e8a7e17b1134ff9ba
                          <Card.Body>
                              <Card.Title>{org.name}</Card.Title>
                                  <strong>Users:</strong>
@@ -184,6 +190,7 @@ class Organizations extends React.Component {
                      </div>
                 ))}
                 </CardColumns>
+            </div>
             </>
         );
     }

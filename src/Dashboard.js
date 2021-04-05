@@ -16,7 +16,6 @@ import MessageBoard from './MessageBoard';
 import { DataStore } from '@aws-amplify/datastore';
 import { Response, Message, Organization, User } from './models';
 import InfiniteScroll from "react-infinite-scroll-component";
-import "./Dashboard.css";
 
 let organizations = [{}];
 let subjects = [{}];

@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+
+.main {
+    color: black;
+    background: #011627;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+  
+.TextBox {
+    background-color: #DADADA;
+}

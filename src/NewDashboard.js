@@ -15,6 +15,7 @@ import { withAuthenticator } from '@aws-amplify/ui-react'
 import MessageBoard from './MessageBoard';
 import { Response, Message, Organization, User } from './models';
 import InfiniteScroll from "react-infinite-scroll-component";
+import styles from "./NewDashboard.module.css";
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -253,30 +254,30 @@ class Dashboard extends React.Component {
 
     renderDashboardInput() {
         return (
-            <Jumbotron style = {{margin: '50px'}}> 
+            <Jumbotron style = {{margin: '50px', color: 'white', borderRadius: "10px", backgroundColor: "#02223C"}}> 
                 <Text fontSize="5xl">Dashboard</Text><br/>
                 {/* Search Bar */}
                 <Center m="auto" w="80%" my="2rem">
-                    <Input bgColor="white" placeholder="Search" onChange={this.handleSearchChange} /> 
+                    <Input bgColor="white" placeholder="Search" onChange={this.handleSearchChange} className={styles.TextBox}/> 
                     <IconButton bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleSearchSubmit} icon={<SearchIcon/>}/>
                 </Center>
 
 
                 {/* Message Submission*/}
                 <Center m="auto" w="80%" my="2rem">
-                    <Input bgColor="white" placeholder="Enter Message" onChange={this.handleMessageChange}/>
-                    <Input bgColor="white" placeholder="Subject" onChange={this.handleSubjectChange} width="15rem"/>
-                    <Select bgColor="white" name="organization-select" id="subject-select" width="30rem" placeholder="Organization" onChange={this.handleOrganizationSelectChange}>
+                    <Input bgColor="white" placeholder="Enter Message" onChange={this.handleMessageChange} className={styles.TextBox}/>
+                    <Input bgColor="white" placeholder="Subject" onChange={this.handleSubjectChange} width="15rem" className={styles.TextBox}/>
+                    <Select color="black" bgColor="white" name="organization-select" id="subject-select" width="30rem" placeholder="Organization" onChange={this.handleOrganizationSelectChange} className={styles.TextBox}>
                         {this.state.all_organizations.map((org) => 
                         <option key = {org.id} value={org.id}>{org.name}</option>
                         )}
                     </Select>
-                    <Button bgColor="#2EC4B6" color="#FDFFFC" isLoading={this.state.state_clicked === true ? "true" : ""} onClick={this.handleMessageSubmit}>Submit</Button>
+                    <Button bgColor="#2EC4B6" color="#FDFFFC" isLoading={this.state.state_clicked === true ? "true" : ""} onClick={this.handleMessageSubmit} >Submit</Button>
                 </Center>
                 
                 {/*Message sort*/}
                 <Center m="auto" w="80%" my="2rem">
-                    <Select bgColor = "white" name = "sort-select" id="sort-select" width="30rem" placeholder="Sort by" onChange={this.handleSortChange} >
+                    <Select className={styles.TextBox} color="black" bgColor = "white" name = "sort-select" id="sort-select" width="30rem" placeholder="Sort by" onChange={this.handleSortChange} >
                         {["Time", "Responses"].map((category) => (
                         <option key={category} value = {category}>{category}</option>
                         ))}
@@ -344,7 +345,7 @@ class Dashboard extends React.Component {
 
         if(message.id == reply.messageID)
             return (
-                <Box border="1px" mb="2rem" borderColor="white" bgColor = "#ededed" padding = "1rem" borderRadius="10px">
+                <Box border="1px" mb="2rem" borderColor="white" bgColor = "#022D4F" padding = "1rem" borderRadius="10px">
                     <Flex >
                         <Text marginLeft="1rem"><strong>{reply.user}:</strong></Text>
                         <Text marginLeft=".5rem" fontWeight="hairline">{reply.time}</Text>
@@ -366,7 +367,7 @@ class Dashboard extends React.Component {
         return (
             
             <Box maxHeight="40rem" overflow="scroll">
-                <Jumbotron style = {{margin: '50px'}}>
+                <Jumbotron style = {{backgroundColor: '#011627'}}>
                     <InfiniteScroll
                         dataLength={this.state.all_messagesActive.length}
                         next={this.state.all_messagesActive}
@@ -377,7 +378,7 @@ class Dashboard extends React.Component {
                         {this.state.all_messagesActive.map((message,index) => (
                             <div key = {message.id} style = {{margin:"1rem"}}>
                                 <Center>
-                                    <Box bgColor="#fdfffc" color="#011627" width="90vw" height="auto" minHeight="5rem" borderRadius="10px" padding="1rem"> 
+                                    <Box bgColor="#02223C" color="white" width="100%" height="auto" minHeight="5rem" borderRadius="10px" padding="1rem"> 
                                         <Box marginBottom = "1rem">
                                             <Flex justify="space-between">
                                             <Flex>
@@ -460,7 +461,7 @@ class Dashboard extends React.Component {
     }
     render(){
         return (
-            <div>
+            <div className={styles.main}>
                 <Topper/>
                 {this.renderDashboardInput()}
 
