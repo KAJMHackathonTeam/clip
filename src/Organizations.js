@@ -3,17 +3,18 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Topper from './Topper.js'
 import { Accordion, Nav, Navbar, NavDropdown, Image, Jumbotron, ListGroup, Container, Col, Row, Carousel, Card, Form, CardColumns } from 'react-bootstrap';
 import { Text, Flex, Button } from '@chakra-ui/react';
-import Amplify, {Auth} from 'aws-amplify'
+import * as queries from './graphql/queries';
+import * as mutations from './graphql/mutations';
+import * as subscriptions from './graphql/subscriptions';
+import Amplify, {API, graphqlOperation, Auth} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
-import { DataStore } from '@aws-amplify/datastore';
-import { Organization } from './models';
-import "./Organizations.css";
 
 class Organizations extends React.Component {
     constructor(props){
         super(props)
         this.state = {
             username: '',
+            inOrg: [],
             name: '',
             user: '',
             users: [],
@@ -35,7 +36,9 @@ class Organizations extends React.Component {
             console.log('error fetching user info: ', err);
           }
         
-        const organizations = await DataStore.query(Organization);
+        let organizations = await API.graphql({ query: queries.listOrganizations})
+        organizations = organizations.data.listOrganizations.items
+        console.log(organizations)
         let organization;
         let exists = false;
         for(var i = 0; i < organizations.length; i ++){
@@ -44,15 +47,39 @@ class Organizations extends React.Component {
                 exists = true
             }
         }
+
+        let users = []
+        for (var i = 0; i < organization.users.length; i ++){
+            users.push(organization.users[i])
+        }
+        let uniqueUsers = [...new Set (users)]
+        users = uniqueUsers
+        console.log(users)
         if(exists === true){
-            this.setState({users: organization.users})
+            this.setState({users: users})
             this.setState({name: organization.name})
             this.setState({id: organization.id})
             this.setState({exists: true})
         }else{
             this.setState({users: [username]})
         }
-
+        var inOrg = []
+        for (var i = 0; i < organizations.length; i ++){
+            if (organizations[i].users.indexOf(username) !== -1){
+                inOrg.push(organizations[i])
+            }
+        }
+        for (var j = 0; j < inOrg.length; j++){
+            let users = []
+            for (var i = 0; i < inOrg[j].users.length; i ++){
+                users.push(inOrg[j].users[i])
+            }
+            let uniqueUsers = [...new Set (users)]
+            users = uniqueUsers
+            inOrg[j].users = users
+        }
+        
+        this.setState({inOrg: inOrg})
     }
     onNameChange(e){
         this.setState({name: e.target.value})
@@ -77,31 +104,33 @@ class Organizations extends React.Component {
         if (this.state.name !== "" && this.state.users !== []){
         try{
         if (this.state.exists === true){
-            const organization = await DataStore.query(Organization, this.state.id);
-            await DataStore.save(Organization.copyOf(organization, item => {
-                item.name = this.state.name
-                item.users = this.state.users
-            }))
+            
+            const organization = {
+                id: this.state.id,
+                name: this.state.name,
+                users: this.state.users
+            }
+            console.log(organization)
+            await API.graphql({query: mutations.updateOrganization, variables: {input: organization}})
             .then(() => {
                 alert("Organization Updated")
                 window.location.reload();
               })
         }else{
-
-            await DataStore.save(
-                new Organization({
-                    "name": this.state.name,
-                    "users": this.state.users,
-                    "creator":this.state.username
-                })
-            )
+            const organization = {
+                name: this.state.name,
+                users: this.state.users,
+                creator: this.state.username
+            }
+            await API.graphql({query: mutations.createOrganization, variables: {input: organization}})
             .then(() => {
                 alert("Organization Created")
                 window.location.reload();
               })
         }
-        }catch{
+        }catch(e){
             alert("Error in creation")
+            console.log(e)
         }
         }else{
             alert("Please fill out all fields")
@@ -110,31 +139,48 @@ class Organizations extends React.Component {
     render(){
         return(
             <>
-            <Topper/>
-            <Jumbotron style = {{margin: '50px'}}>
-                <Text fontSize="5xl">Manage Organizations</Text><br/>
-            <Form id = 'CreateOrganizations'>
-                    <Form.Group controlId="formName">
-                        <Form.Label>Organization Name</Form.Label><br/>
-                        <Form.Control type = 'text' onChange = {this.onNameChange} value = {this.state.name} />
-                    </Form.Group>
-                    <Form.Group controlId="formUsers">
-                        <Form.Label>Users</Form.Label><br/>
-                        <Flex style = {{display:'flex'}}>
-                            <Form.Control type = 'text' onChange = {this.onUserChange} value = {this.state.user} />
-                            <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.onUserSubmit}>Enter User</Button>
-                        </Flex>
-                            <br/>
-                        <Form.Label>Current Users</Form.Label>
-                        {this.state.users.map(user => {
-                            return(
-                                <div key = {user}><p><strong>{user}</strong></p></div>
-                            )
-                        })}<br/>
-                    </Form.Group><br/>
-                    <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.handleSubmit}>Submit</Button>
-                </Form> 
-            </Jumbotron>
+                <Topper/>
+                <Jumbotron style = {{margin: '50px'}}>
+                    <Text fontSize="5xl">Manage Organizations</Text><br/>
+                   <Form id = 'CreateOrganizations'>
+                        <Form.Group controlId="formName">
+                            <Form.Label>Organization Name</Form.Label><br/>
+                            <Form.Control type = 'text' onChange = {this.onNameChange} value = {this.state.name} />
+                        </Form.Group>
+                        <Form.Group controlId="formUsers">
+                            <Form.Label>Users</Form.Label><br/>
+                            <Flex style = {{display:'flex'}}>
+                                <Form.Control type = 'text' onChange = {this.onUserChange} value = {this.state.user} />
+                                <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.onUserSubmit}>Enter User</Button>
+                            </Flex>
+                                <br/>
+                            <Form.Label>Current Users</Form.Label>
+                            {this.state.users.map(user => {
+                                return(
+                                    <div style = {{marginLeft: '1rem'}} key = {user}><p><strong>{user}</strong></p></div>
+                                )
+                            })}<br/>
+                        </Form.Group><br/>
+                        <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.handleSubmit}>Submit</Button>
+                    </Form> 
+                </Jumbotron>
+                <CardColumns style = {{columns: 'auto'}}>
+                {this.state.inOrg.map((org) => (
+                     <div key = {org.id} >
+                     <Card  style={{ width: '18rem', margin: '5vw' }} > 
+                         <Card.Body>
+                             <Card.Title>{org.name}</Card.Title>
+                             <Card.Text>
+                                 <strong>Users:</strong>
+                                 {org.users.map((user) => (
+                                     <p style = {{marginLeft: '1rem'}}  key = {user}>{user}</p>
+                                 ))}
+                             </Card.Text>
+                         </Card.Body>                         
+                     </Card>
+                     </div>
+                ))}
+                </CardColumns>
             </>
         );
     }
