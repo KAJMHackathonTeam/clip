@@ -154,7 +154,7 @@ class Dashboard extends React.Component {
             this.setState({all_responses : responsesSubscribed});
             this.setState({all_organizations : organizationsSubscribed})
             this.setState({all_messagesAndResponsesMapped : messagesAndResponsesMapped});
-
+            this.setState({state_clicked: false})
 
             console.log("messagesAll: ", messagesAll);
             console.log("organizationsAll: ",organizationsAll);

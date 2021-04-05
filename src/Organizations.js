@@ -104,6 +104,7 @@ class Organizations extends React.Component {
             let uniqueUsers = [...new Set (users)]
             users = uniqueUsers
             this.setState({users: users})
+            console.log(users)
             this.setState({user: ""})
         }
     }
@@ -111,13 +112,14 @@ class Organizations extends React.Component {
         if (this.state.name !== "" && this.state.users !== []){
         try{
         if (this.state.exists === true){
-            
+            console.log(this.state.users)
             const organization = {
                 id: this.state.id,
                 name: this.state.name,
                 users: this.state.users
             }
-            await API.graphql({query: mutations.updateOrganization, variables: {input: organization}})
+            console.log(organization)
+            const final = await API.graphql({query: mutations.updateOrganization, variables: {input: organization}})
             .then(() => {
                 alert("Organization Updated")
                 window.location.reload();
@@ -174,11 +176,7 @@ class Organizations extends React.Component {
                 <CardColumns >
                 {this.state.inOrg.map((org) => (
                      <div key = {org.id} >
-<<<<<<< HEAD
-                     <Card  style={{ maxWidth: '18rem', margin: '5vw' }} > 
-=======
                      <Card  style={{ width: '18rem', margin: '5vw',  backgroundColor: "#02223C", color: 'white' }} > 
->>>>>>> 4d0a0b0237ba561bbec0e50e8a7e17b1134ff9ba
                          <Card.Body>
                              <Card.Title>{org.name}</Card.Title>
                                  <strong>Users:</strong>
