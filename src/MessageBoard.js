@@ -1,8 +1,9 @@
 import React from "react";
-import { DataStore } from '@aws-amplify/datastore';
-import { Response, Message, Organization, User } from './models';
 import { Box, Text, Flex, Center, Input, Button } from "@chakra-ui/react";
-
+import * as queries from './graphql/queries';
+import * as mutations from './graphql/mutations';
+import * as subscriptions from './graphql/subscriptions';
+import { Amplify, Auth, API} from 'aws-amplify'
 const messages = [{}];
 class MessageBoard extends React.Component {
     constructor(props){
@@ -12,8 +13,9 @@ class MessageBoard extends React.Component {
         }
     }
     async componentDidMount() {
-        const models = await DataStore.query(Response);
-        console.log(models);
+        let responsesAll = await API.graphql({ query: queries.listResponses})
+        responsesAll = responsesAll.data.listResponses.items
+        console.log(responsesAll)
     }
 
     render() {

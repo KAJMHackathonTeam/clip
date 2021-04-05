@@ -13,7 +13,6 @@ import * as subscriptions from './graphql/subscriptions';
 import { Amplify, Auth, API} from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
 import MessageBoard from './MessageBoard';
-import { DataStore } from '@aws-amplify/datastore';
 import { Response, Message, Organization, User } from './models';
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -275,9 +274,13 @@ class Dashboard extends React.Component {
     //########################################## TABLE INPUT HANDLERS + RENDER
     async deleteMessage(id){
         //delete message and all responses associated
-        const modelToDelete = await DataStore.query(Message, id);
-        DataStore.delete(modelToDelete);
+        const modelToDelete = {
+            id: id
+        }
 
+        await API.graphql({query: mutations.deleteMessage, variables: {input: modelToDelete}})
+
+        
         var toDelete = []
         for (var i = 0; i < this.state.all_responses.length; i ++){
             if (this.state.all_responses[i].messageID === id){
@@ -285,9 +288,9 @@ class Dashboard extends React.Component {
             }
         }
         for (i = 0; i < toDelete.length; i ++){
-            DataStore.delete(toDelete[i])
+            await API.graphql({query: mutations.deleteMessage, variables: {input: toDelete[i]}})
         }
-        const testCheck = await DataStore.query(Response)
+        let responses = await API.graphql({ query: queries.listResponses})
         .then(() => {
             this.updateLocalData();
             this.handleSearchSubmit();
@@ -308,14 +311,13 @@ class Dashboard extends React.Component {
         let messageRef = this.state.all_messagesActive[parseInt(event.target.id)];
 
 
-        await DataStore.save(
-            new Response({
-                "response": this.state.usr_replies[event.target.id],
-                "messageID": messageRef.id,
-                "user": this.state.usr_username,
-                "time": (new Date()).toString()
-            })
-        );
+        let response = {
+            "response": this.state.reply[event.target.id],
+            "messageID": messageRef.id,
+            "user": this.state.username,
+            "time": (new Date()).toString()
+    }
+    await API.graphql({query: mutations.createResponse, variables: {input: response}})
         
         this.updateLocalData();
         this.handleSearchSubmit();
