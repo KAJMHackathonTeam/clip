@@ -160,7 +160,7 @@ class Organizations extends React.Component {
                             <Form.Label>Users</Form.Label><br/>
                             <Flex style = {{display:'flex'}}>
                                 <Form.Control type = 'text' onChange = {this.onUserChange} value = {this.state.user} className={styles.TextBox} />
-                                <Button color="#fdfffc" bgColor="#2EC4B6" onClick = {this.onUserSubmit}>Enter User</Button>
+                                <Button  ml="1rem"color="#fdfffc" bgColor="#2EC4B6" onClick = {this.onUserSubmit}>Enter User</Button>
                             </Flex>
                                 <br/>
                             <Form.Label>Current Users</Form.Label>

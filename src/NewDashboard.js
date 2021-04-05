@@ -242,28 +242,28 @@ class Dashboard extends React.Component {
                 <Text fontSize="5xl">Dashboard</Text><br/>
                 {/* Search Bar */}
                 <Center m="auto" w="80%" my="2rem">
-                    <Input bgColor="white" placeholder="Search" onChange={this.handleSearchChange} className={styles.TextBox}/> 
-                    <IconButton bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleSearchSubmit} icon={<SearchIcon/>}/>
+                    <Input bgColor="#082D4F" placeholder="Search" onChange={this.handleSearchChange} className={styles.TextBox} borderRadius="10px"/> 
+                    <IconButton ml="1rem" bgColor="#2EC4B6" color="#FDFFFC" onClick={this.handleSearchSubmit} icon={<SearchIcon/>} borderRadius="10px"/>
                 </Center>
 
 
                 {/* Message Submission*/}
                 <Center m="auto" w="80%" my="2rem">
-                    <Input bgColor="white" placeholder="Enter Message" onChange={this.handleMessageChange} className={styles.TextBox}/>
-                    <Input bgColor="white" placeholder="Subject" onChange={this.handleSubjectChange} width="15rem" className={styles.TextBox}/>
-                    <Select color="black" bgColor="white" name="organization-select" id="subject-select" width="30rem" placeholder="Organization" onChange={this.handleOrganizationSelectChange} className={styles.TextBox}>
+                    <Input bgColor="#082D4F" placeholder="Enter Message" onChange={this.handleMessageChange} className={styles.TextBox} borderRadius="10px"/>
+                    <Input mx="1rem" bgColor="#082D4F" placeholder="Subject" onChange={this.handleSubjectChange} width="15rem" borderRadius="10px" className={styles.TextBox} borderRadius="10px"/>
+                    <Select bgColor="#082D4F" name="organization-select" id="subject-select" width="30rem" borderRadius="10px" placeholder="Organization" onChange={this.handleOrganizationSelectChange} className={styles.TextBox}  color="white">
                         {this.state.all_organizations.map((org) => 
-                        <option key = {org.id} value={org.id}>{org.name}</option>
+                        <option className="SelectOption" key = {org.id} value={org.id}>{org.name}</option>
                         )}
                     </Select>
-                    <Button bgColor="#2EC4B6" color="#FDFFFC" isLoading={this.state.state_clicked === true ? "true" : ""} onClick={this.handleMessageSubmit} >Submit</Button>
+                    <Button ml="1rem" borderRadius="10px" bgColor="#2EC4B6" color="#FDFFFC" isLoading={this.state.state_clicked === true ? "true" : ""} onClick={this.handleMessageSubmit} >Submit</Button>
                 </Center>
                 
                 {/*Message sort*/}
                 <Center m="auto" w="80%" my="2rem">
-                    <Select className={styles.TextBox} color="black" bgColor = "white" name = "sort-select" id="sort-select" width="30rem" placeholder="Sort by" onChange={this.handleSortChange} >
+                    <Select className={styles.TextBox} color="white" bgColor = "#082D4F" name = "sort-select" id="sort-select" width="30rem" placeholder="Sort by" onChange={this.handleSortChange} >
                         {["Time", "Responses"].map((category) => (
-                        <option key={category} value = {category}>{category}</option>
+                        <option className="SelectOption" key={category} value = {category}>{category}</option>
                         ))}
                     </Select>
                 </Center>
@@ -392,7 +392,7 @@ class Dashboard extends React.Component {
                                         <Box>
                                             <Flex>
                                                 <Input placeholder="Reply" onChange={this.handleReplyChange} id={index} key={"input"+index} ></Input>
-                                                <Button color="white" bgColor="#2EC4B6" onClick={this.handleReplySubmit} id={index} key={"btn"+index}>Reply</Button>
+                                                <Button ml="1rem" color="white" bgColor="#2EC4B6" onClick={this.handleReplySubmit} id={index} key={"btn"+index}>Reply</Button>
                                             </Flex> 
                                         </Box>
                                     </Box>

@@ -7,6 +7,14 @@
 }
   
 .TextBox {
-    background-color: #EBEBEB;
+    background-color: #082D4F;
+    color: white;
+}
+
+.SelectOption {
+    color: black;
+}
+
+.SelectOption ::placeholder {
     color: black;
 }
