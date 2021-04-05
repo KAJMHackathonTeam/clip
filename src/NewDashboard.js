@@ -225,15 +225,18 @@ class Dashboard extends React.Component {
 
             const api = 'https://agu8mq4047.execute-api.us-east-1.amazonaws.com/staging'
             const data = {"query" : this.state.usr_message}
+
             axios
                 .post(api, data)
                 .then((response) => {
+                    console.log(response)
                     response = {
                         "response": response["data"].body,
                         "messageID": searchID,
                         "user": "Clip! Bot",
                         "time": time
                     }
+                    console.log(response)
                     API.graphql({query: mutations.createResponse, variables: {input: response}})
                     .then(() => {
                         alert('Question Asked')
@@ -257,9 +260,9 @@ class Dashboard extends React.Component {
             <Popover>
                 <Popover.Title as="h3">Message Commands</Popover.Title>
                 <Popover.Content>
-                    <strong>summarizeQ: </strong>Summarizes main ideas from entered text<br/>
-                    <strong>learnQ: </strong>Gets Khan Academy search link<br/>
-                    <strong>googleQ: </strong>Returns list of relevant Google links<br/>
+                    <strong>summarizeQ: </strong>Summarizes main ideas from entered text - summarizeQ (integer number of sentences wanted) (text)<br/>
+                    <strong>learnQ: </strong>Gets Khan Academy search link - learnQ (text)<br/>
+                    <strong>googleQ: </strong>Returns list of relevant Google links - googleQ (text)<br/>
                 </Popover.Content>
             </Popover>
         );
@@ -275,7 +278,7 @@ class Dashboard extends React.Component {
 
                 {/* Message Submission*/}
                 <Center m="auto" w="80%" my="2rem">
-                    <OverlayTrigger trigger="hover" placement="top" overlay={popover}>
+                    <OverlayTrigger trigger="focus" placement="top" overlay={popover}>
                         <Input bgColor="#082D4F" placeholder="Enter Message" onChange={this.handleMessageChange} className={styles.TextBox} borderRadius="10px"/>
                     </OverlayTrigger>
                     <Input mx="1rem" bgColor="#082D4F" placeholder="Subject" onChange={this.handleSubjectChange} width="15rem" borderRadius="10px" className={styles.TextBox} borderRadius="10px"/>

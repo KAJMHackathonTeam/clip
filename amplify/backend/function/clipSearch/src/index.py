@@ -9,19 +9,20 @@ templateString = "https://www.khanacademy.org/search?referer=%2F&page_search_que
 
 def getResult(question):
     app_id = '7VELAH-V9EG8GKT3Q'
-    if "summarizeQ" in question:
-        question = question.replace('summarizeQ ', "")
-        numSentences = int(question[0])
-        question = question[1:]
-        return getSummary(question, numSentences)
-    
-    if 'googleQ' in question:
-        return googleSearch(question)
-    if 'learnQ' in question:
-        return khanSearch(question)
+
 
 
     try:
+        if "summarizeQ" in question:
+            question = question.replace('summarizeQ ', "")
+            numSentences = int(question[0])
+            question = question[1:]
+            return getSummary(question, numSentences)
+    
+        if 'googleQ' in question:
+            return googleSearch(question)
+        if 'learnQ' in question:
+            return khanSearch(question)
         client = wolframalpha.Client(app_id)
         res = client.query(question)
         results = next(res.results)

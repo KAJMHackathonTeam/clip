@@ -3,6 +3,7 @@
 .main {
     color: #fdfffc;
     background: #011627;
+    min-height: 100vh;
     font-family: 'Source Sans Pro', sans-serif;
 }
   

@@ -149,7 +149,7 @@ class Organizations extends React.Component {
             <>
             <div className={styles.main}>
             <Topper/>
-                <Jumbotron style = {{margin: '50px', backgroundColor: "#02223C", color:"white"}}>
+                <Jumbotron style = {{margin: '50px', backgroundColor: "#02223C",  color:"white"}}>
                     <Text fontSize="5xl">Manage Organizations</Text><br/>
                    <Form id = 'CreateOrganizations'>
                         <Form.Group controlId="formName">
