@@ -9,3 +9,6 @@ https://dev.d1j5mewluzppiw.amplifyapp.com/
 
 **YouTube Video Link**
 https://youtu.be/xm8x8R2Xgkw
+
+**Devpost Submission Link**
+https://devpost.com/software/clip
